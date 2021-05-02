@@ -1,200 +1,149 @@
-import MaterialTable, { MTableToolbar } from "material-table";
-import React, { forwardRef, useRef, useState } from "react";
-import axios from "axios";
-import { DeleteOutline } from "@material-ui/icons";
-import { Button, CircularProgress, Grid, TextField } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import useVentas from "../../hooks/useOrders";
+import {
+  Button,
+  Grid,
+  IconButton,
+  CircularProgress,
+  Typography,
+} from "@material-ui/core";
+import MuiTable from "../../components/moleculas/MuiTable";
+import CreateShippingModal from "../../components/organisms/CreateShippingModal";
+import { useOrdersContext } from "contextApi/OrdersContext";
 
-const tableIcons = {
-  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-};
 export default function POS() {
-  const generateBarCodesOfProducts = 0;
-  const code = useRef();
-  const name = useRef();
-  const quantity = useRef();
-  //const showNotification = useCustomSnackbar();
   const [isLoading, setIsLoading] = useState(false);
-  const [validateInput, setValidateInput] = useState({
-    codeHaveError: false,
-    quantityHaveError: false,
-    message: "Este campo es obligatorio",
-  });
-  const columns = [
-    { title: "Codigo", field: "code" },
-    {
-      title: "Nombre",
-      field: "name",
+  const [pagination, setPagination] = useState({ limit: 10, page: 1 });
+  const [totalVentas, setTotalVentas] = useState(0);
+  const [ventas, setVentas] = useState([]);
+  const { getVentas } = useVentas();
+  const { setOrderToShipping } = useOrdersContext();
+
+  const createShipping = (orderNumber) => {
+    setIsLoading(true);
+
+    setOrderToShipping({});
+  };
+
+  const handleGetOrders = () => {
+    setIsLoading(true);
+    getVentas(pagination)
+      .then((response) => {
+        if (response) {
+          setVentas(response);
+          setTotalVentas(response.length);
+        }
+      })
+      .catch((err) => {
+        // TODO redireccionar en 403
+        console.log("err", err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    handleGetOrders();
+    console.log("ventas", ventas);
+  }, [pagination]);
+
+  const options = {
+    print: false,
+    filter: false,
+    count: totalVentas,
+    serverSide: true,
+    search: false,
+    viewColumns: false,
+    download: false,
+    rowHover: true,
+    rowsPerPageOptions: [5, 10, 20],
+    selectableRows: false,
+    onChangeRowsPerPage: (numberOfRows) => {},
+    onTableChange: (action, tableState) => {
+      if (action === "changePage") {
+        const newPagination = {
+          ...pagination,
+          page: tableState.page + 1,
+        };
+        setPagination(newPagination);
+      }
+      if (action === "changeRowsPerPage") {
+        const newPagination = {
+          ...pagination,
+          limit: tableState.rowsPerPage,
+        };
+        setPagination(newPagination);
+      }
     },
-    { title: "Cantidad", field: "quantity", type: "numeric" },
+    isRowSelectable: (dataIndex) => {
+      return false;
+    },
+  };
+
+  const columns = [
+    {
+      name: "",
+      label: "",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, update) => {
+          let rowIndex = Number(tableMeta.rowIndex) + 1;
+          return <span>{rowIndex}</span>;
+        },
+      },
+    },
+    // 3 date_created -> Fecha del pedido
+    {
+      name: "fechaVenta",
+      label: "Fecha de la venta",
+    },
+    {
+      name: "nota",
+      label: "Nota",
+    },
+    {
+      name: "action",
+      label: "Acción",
+      options: {
+        customBodyRender: (value, tableMeta, update) => {
+          return (
+            <Button
+              variant="outlined"
+              size="small"
+              disabled={isLoading}
+              color="primary"
+              onClick={async () => {
+                createShipping(tableMeta.rowData[0]);
+              }}
+            >
+              {isLoading ? <CircularProgress size={24} /> : ""} VER
+            </Button>
+          );
+        },
+      },
+    },
   ];
 
-  const [data, setData] = useState([]);
-
-  const addRow = () => {
-    if (!code.current.value) {
-      setValidateInput({ ...validateInput, codeHaveError: true });
-    } else if (!quantity.current.value) {
-      setValidateInput({ ...validateInput, quantityHaveError: true });
-    } else {
-      setValidateInput({
-        ...validateInput,
-        codeHaveError: false,
-        quantityHaveError: false,
-      });
-      setData([
-        ...data,
-        {
-          code: code.current.value,
-          name: name.current.value,
-          quantity: quantity.current.value,
-        },
-      ]);
-      code.current.value = "";
-      name.current.value = "";
-      quantity.current.value = "";
-      code.current.focus();
-    }
-  };
-
-  const printProducts = async () => {
-    if (data.length > 0) {
-      const pdf = await generateBarCodesOfProducts(data);
-      //downloadPDF(pdf, `códigos`);
-      setData([]);
-      code.current.value = "";
-      name.current.value = "";
-      quantity.current.value = "";
-      code.current.focus();
-    } else {
-    //   showNotification(
-    //     "Debe haber por lo menos un código para imprimir",
-    //     "error"
-    //   );
-    }
-  };
-
-  const searchProductNameByCode = async () => {
-    try {
-      if (code.current.value) {
-        setValidateInput({ ...validateInput, codeHaveError: false });
-        setIsLoading(true);
-        const response = await axios.get(`/code/${code.current.value}`);
-        if (!response.data) {
-          //showNotification("No se encontró el Producto", "error");
-          setIsLoading(false);
-          return;
-        }
-        name.current.value = response.data.name;
-        setIsLoading(false);
-        quantity.current.focus();
-      } else {
-        setValidateInput({ ...validateInput, codeHaveError: true });
-      }
-    } catch (error) {
-      setIsLoading(false);
-      console.log("error");
-    }
-  };
   return (
     <>
-      <Grid container justify="center" spacing={2} style={{ margin: "10px 0" }}>
-        <Grid item md={2} lg={2} xs={12}>
-          <TextField
-            label="Codigo"
-            autoFocus
-            error={validateInput.codeHaveError}
-            helperText={
-              validateInput.codeHaveError ? validateInput.message : ""
-            }
-            inputRef={code}
-            onKeyPress={(e) => {
-              if (e.key === "Enter") searchProductNameByCode();
-            }}
+      <Grid container justify="center" spacing={2}>
+        <Grid item xs={12} sm={12}>
+          <Typography variant="h5" component="h1" align="center">
+            VENTAS
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <MuiTable
+            title="Lista de pedidos"
+            isLoading={isLoading}
+            columns={columns}
+            data={ventas}
+            options={options}
           />
-        </Grid>
-        <Grid item md={2} lg={2} xs={12}>
-          <TextField label="Nombre" disabled inputRef={name} />
-        </Grid>
-        <Grid item md={2} lg={2} xs={12}>
-          <TextField
-            label="Cantidad"
-            inputRef={quantity}
-            error={validateInput.quantityHaveError}
-            helperText={
-              validateInput.quantityHaveError ? validateInput.message : ""
-            }
-            type="number"
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                addRow();
-              }
-            }}
-          />
-        </Grid>
-        <Grid item md={2} lg={2} xs={12}>
-          <Button
-            size="large"
-            variant="outlined"
-            color="primary"
-            onClick={addRow}
-          >
-            Adicionar
-          </Button>
-        </Grid>
-        <Grid>
-          {isLoading ? (
-            <CircularProgress size={24} style={{ marginLeft: 10 }} />
-          ) : (
-            ""
-          )}
         </Grid>
       </Grid>
-      <MaterialTable
-        icons={tableIcons}
-        title="Impresion de codigos"
-        columns={columns}
-        data={data}
-        actions={[
-          (oldData) => ({
-            icon: tableIcons.Delete,
-            tooltip: "Delete User",
-            onClick: () => {
-              const dataDelete = [...data];
-              const index = oldData.tableData.id;
-              dataDelete.splice(index, 1);
-              setData([...dataDelete]);
-            },
-          }),
-        ]}
-        options={{
-          actionsColumnIndex: -1,
-          search: false,
-          paging: true,
-          pageSize: 20, // make initial page size
-          emptyRowsWhenPaging: true, // to make page size fix in case of less data rows
-          pageSizeOptions: [20, 50, 100], // rows selection options
-        }}
-        components={{
-          Toolbar: (props) => (
-            <div>
-              <MTableToolbar {...props} />
-
-              <Grid container justify="flex-end" style={{ margin: "0 -10px" }}>
-                <Grid>
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    color="primary"
-                    onClick={printProducts}
-                  >
-                    Imprimir
-                  </Button>
-                </Grid>
-              </Grid>
-            </div>
-          ),
-        }}
-      />
+      <CreateShippingModal getOrders={handleGetOrders} />
     </>
   );
 }
