@@ -11,14 +11,13 @@ export const initialStateOrdersReducer = {
   totalOrders: 0,
   totalPages: 1,
   openModalCreateShipping: false,
-  orderToShipping: {
-    orderNumber: 0,
-    recipientsName: "",
-    recipientsAddress: "",
-    recipientsProvinceName: "",
-    recipientsCityName: "",
-    packages: [],
-    name: "",
+  venta: {
+    id: "",
+    asociadoIdAsociado: "",
+    nota: null,
+    fechaVenta: "",
+    estado: true,
+    ventaDetalles: [],
   },
   shipping: {
     cityCode: "",
@@ -49,7 +48,7 @@ export default function ordersReducer(state, action) {
     case SET_ORDER_TO_SHIPPING:
       return {
         ...state,
-        orderToShipping: action.payload,
+        venta: action.payload,
         openModalCreateShipping: true,
       };
     case OPEN_MODAL_CREATE_SHIPPING:

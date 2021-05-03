@@ -17,12 +17,13 @@ export default function POS() {
   const [totalVentas, setTotalVentas] = useState(0);
   const [ventas, setVentas] = useState([]);
   const { getVentas } = useVentas();
-  const { setOrderToShipping } = useOrdersContext();
+  const { setVenta } = useOrdersContext();
 
-  const createShipping = (orderNumber) => {
+  const createShipping = (position) => {
     setIsLoading(true);
 
-    setOrderToShipping({});
+    setVenta(ventas[position]);
+    setIsLoading(false);
   };
 
   const handleGetOrders = () => {
@@ -114,7 +115,7 @@ export default function POS() {
               disabled={isLoading}
               color="primary"
               onClick={async () => {
-                createShipping(tableMeta.rowData[0]);
+                createShipping(tableMeta.rowIndex);
               }}
             >
               {isLoading ? <CircularProgress size={24} /> : ""} VER

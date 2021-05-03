@@ -9,7 +9,7 @@ import {
   OPEN_MODAL_CREATE_SHIPPING,
 } from "../actions/orders.actions";
 import { getAllVentas } from "../services/ordersService";
-import useLogin from "hooks/useLogin";
+import useUser from "hooks/useLogin";
 import { useHistory } from "react-router-dom";
 
 const defaultPagination = {
@@ -46,11 +46,11 @@ export function OrdersContextProvider(props) {
       isLoadingOrders,
       openModalCreateShipping,
       shipping,
-      orderToShipping,
+      venta,
     },
     dispatch,
   ] = useReducer(ordersReducer, initialStateOrdersReducer);
-  const { jwt } = useLogin();
+  const { jwt } = useUser();
 
   useEffect(() => {}, []);
 
@@ -88,8 +88,8 @@ export function OrdersContextProvider(props) {
       });
   };
 
-  const setOrderToShipping = (orderToShipping) => {
-    dispatch({ type: SET_ORDER_TO_SHIPPING, payload: orderToShipping });
+  const setVenta = (venta) => {
+    dispatch({ type: SET_ORDER_TO_SHIPPING, payload: venta });
   };
 
   const handleOpenModalCreateShipping = (value) => {
@@ -102,7 +102,7 @@ export function OrdersContextProvider(props) {
         orders: orders,
         totalOrders,
         getOrders,
-        setOrderToShipping,
+        setVenta,
         openModalCreateShipping,
         handleOpenModalCreateShipping,
         updatePagination,
@@ -110,7 +110,7 @@ export function OrdersContextProvider(props) {
         shipping,
         orderPackages,
         setOrderPackages,
-        orderToShipping,
+        venta,
         orderPackageShipping,
         setOrderPackageShipping,
       }}
