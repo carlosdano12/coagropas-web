@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import MuiTable from "../../components/moleculas/MuiTable";
 import CreateShippingModal from "../../components/organisms/CreateShippingModal";
+import ModalVenta from "./venta";
 import { useOrdersContext } from "contextApi/OrdersContext";
 
 export default function POS() {
@@ -17,7 +18,7 @@ export default function POS() {
   const [totalVentas, setTotalVentas] = useState(0);
   const [ventas, setVentas] = useState([]);
   const { getVentas } = useVentas();
-  const { setVenta } = useOrdersContext();
+  const { setVenta, handleOpenModalVenta } = useOrdersContext();
 
   const createShipping = (position) => {
     setIsLoading(true);
@@ -133,6 +134,13 @@ export default function POS() {
           <Typography variant="h5" component="h1" align="center">
             VENTAS
           </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleOpenModalVenta(true)}
+          >
+            CREAR VENTA
+          </Button>
         </Grid>
         <Grid item xs={12} sm={12}>
           <MuiTable
@@ -145,6 +153,7 @@ export default function POS() {
         </Grid>
       </Grid>
       <CreateShippingModal getOrders={handleGetOrders} />
+      <ModalVenta />
     </>
   );
 }

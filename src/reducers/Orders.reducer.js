@@ -3,6 +3,7 @@ import {
   SET_ORDER_TO_SHIPPING,
   UPDATE_ISlOADING_ORDERS,
   OPEN_MODAL_CREATE_SHIPPING,
+  OPEN_MODAL_CREATE_VENTA,
 } from "actions/orders.actions";
 
 export const initialStateOrdersReducer = {
@@ -11,6 +12,7 @@ export const initialStateOrdersReducer = {
   totalOrders: 0,
   totalPages: 1,
   openModalCreateShipping: false,
+  openModalVenta: false,
   venta: {
     id: "",
     asociadoIdAsociado: "",
@@ -53,6 +55,8 @@ export default function ordersReducer(state, action) {
       };
     case OPEN_MODAL_CREATE_SHIPPING:
       return { ...state, openModalCreateShipping: action.payload };
+    case OPEN_MODAL_CREATE_VENTA:
+      return { ...state, openModalVenta: action.payload };
     default:
       return state;
   }

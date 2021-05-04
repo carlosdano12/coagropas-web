@@ -7,6 +7,7 @@ import {
   UPDATE_ISlOADING_ORDERS,
   SET_ORDER_TO_SHIPPING,
   OPEN_MODAL_CREATE_SHIPPING,
+  OPEN_MODAL_CREATE_VENTA,
 } from "../actions/orders.actions";
 import { getAllVentas } from "../services/ordersService";
 import useUser from "hooks/useLogin";
@@ -45,6 +46,7 @@ export function OrdersContextProvider(props) {
       totalOrders,
       isLoadingOrders,
       openModalCreateShipping,
+      openModalVenta,
       shipping,
       venta,
     },
@@ -95,6 +97,9 @@ export function OrdersContextProvider(props) {
   const handleOpenModalCreateShipping = (value) => {
     dispatch({ type: OPEN_MODAL_CREATE_SHIPPING, payload: value });
   };
+  const handleOpenModalVenta = (value) => {
+    dispatch({ type: OPEN_MODAL_CREATE_VENTA, payload: value });
+  };
   return (
     <OrdersContext.Provider
       value={{
@@ -104,7 +109,9 @@ export function OrdersContextProvider(props) {
         getOrders,
         setVenta,
         openModalCreateShipping,
+        openModalVenta,
         handleOpenModalCreateShipping,
+        handleOpenModalVenta,
         updatePagination,
         pagination,
         shipping,

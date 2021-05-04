@@ -1,17 +1,20 @@
 import MaterialTable, { MTableToolbar } from "material-table";
 import React, { forwardRef, useRef, useState } from "react";
+import ModalContainer from "../../components/moleculas/ModalContainer";
 import axios from "axios";
 import { DeleteOutline } from "@material-ui/icons";
 import { Button, CircularProgress, Grid, TextField } from "@material-ui/core";
+import { useOrdersContext } from "contextApi/OrdersContext";
 
 const tableIcons = {
   Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
 };
-export default function POS() {
+export default function ModalVenta() {
   const generateBarCodesOfProducts = 0;
   const code = useRef();
   const name = useRef();
   const quantity = useRef();
+  const { openModalVenta, handleOpenModalVenta } = useOrdersContext();
   //const showNotification = useCustomSnackbar();
   const [isLoading, setIsLoading] = useState(false);
   const [validateInput, setValidateInput] = useState({
@@ -66,10 +69,10 @@ export default function POS() {
       quantity.current.value = "";
       code.current.focus();
     } else {
-    //   showNotification(
-    //     "Debe haber por lo menos un código para imprimir",
-    //     "error"
-    //   );
+      //   showNotification(
+      //     "Debe haber por lo menos un código para imprimir",
+      //     "error"
+      //   );
     }
   };
 
@@ -96,7 +99,12 @@ export default function POS() {
     }
   };
   return (
-    <>
+    <ModalContainer
+      open={openModalVenta}
+      onClose={() => handleOpenModalVenta(false)}
+      title="Crear venta"
+      maxWidth="lg"
+    >
       <Grid container justify="center" spacing={2} style={{ margin: "10px 0" }}>
         <Grid item md={2} lg={2} xs={12}>
           <TextField
@@ -195,6 +203,6 @@ export default function POS() {
           ),
         }}
       />
-    </>
+    </ModalContainer>
   );
 }

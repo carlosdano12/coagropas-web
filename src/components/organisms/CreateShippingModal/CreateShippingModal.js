@@ -2,19 +2,16 @@ import React, { useState } from "react";
 import { useOrdersContext } from "../../../contextApi/OrdersContext";
 import ModalContainer from "../../moleculas/ModalContainer";
 import MuiTable from "../../moleculas/MuiTable";
-import { Grid, Button, TextField, Typography } from "@material-ui/core";
+import { Grid, TextField, Typography } from "@material-ui/core";
 
 export default function CreateTrackingId(props) {
   const [isLoading, setIsLoading] = useState(false);
   const {
     openModalCreateShipping,
     venta,
-    orderPackageShipping,
-    orderPackages,
-    setOrderPackageShipping,
     handleOpenModalCreateShipping,
   } = useOrdersContext();
-  console.log("venta", venta);
+
   const options = {
     print: false,
     filter: false,
@@ -46,8 +43,15 @@ export default function CreateTrackingId(props) {
     },
     // 3 date_created -> Fecha del pedido
     {
-      name: "niame.nombre",
+      name: "niame",
       label: "Ñame",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (value, tableMeta, updateValue) => (
+          <Typography>{value.nombre}</Typography>
+        ),
+      },
     },
     {
       name: "cantidad",
