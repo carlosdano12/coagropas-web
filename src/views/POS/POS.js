@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import useVentas from "../../hooks/useOrders";
-import {
-  Button,
-  Grid,
-  IconButton,
-  CircularProgress,
-  Typography,
-} from "@material-ui/core";
+import { Button, Grid, CircularProgress, Typography } from "@material-ui/core";
 import MuiTable from "../../components/moleculas/MuiTable";
 import CreateShippingModal from "../../components/organisms/CreateShippingModal";
 import ModalVenta from "./venta";
@@ -29,7 +23,7 @@ export default function POS() {
 
   const handleGetOrders = () => {
     setIsLoading(true);
-    getVentas(pagination)
+    getVentas()
       .then((response) => {
         if (response) {
           setVentas(response);
@@ -46,8 +40,11 @@ export default function POS() {
   };
 
   useEffect(() => {
-    handleGetOrders();
-    console.log("ventas", ventas);
+    let m = false;
+    if (!m) handleGetOrders();
+    return () => {
+      m = true;
+    };
   }, [pagination]);
 
   const options = {

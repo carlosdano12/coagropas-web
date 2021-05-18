@@ -10,12 +10,12 @@ import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
 import POS from "views/POS";
-import Typography from "views/Typography/Typography.js";
 import Icons from "views/Icons/Icons.js";
 import Maps from "views/Maps/Maps.js";
 import NotificationsPage from "views/Notifications/Notifications.js";
 // core components/views for RTL layout
 import RTLPage from "views/RTLPage/RTLPage.js";
+import Niame from "views/Niames/Niame";
 
 const dashboardRoutes = [
   {
@@ -43,7 +43,7 @@ const dashboardRoutes = [
     path: "/tiposname",
     name: "Tipos de ñame",
     icon: LayersIcon,
-    component: Typography,
+    component: Niame,
     layout: "/admin",
   },
   {
