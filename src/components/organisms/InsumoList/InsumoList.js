@@ -3,7 +3,7 @@ import MuiTable from "components/moleculas/MuiTable";
 import { Button, Grid } from "@material-ui/core";
 import CustomToolbar from "components/moleculas/CustomToolBar/CustomToolBar";
 
-export default function NiameList(props) {
+export default function InsumoList(props) {
   const {
     providers,
     isLoading,
@@ -21,15 +21,7 @@ export default function NiameList(props) {
     },
     {
       name: "nombre",
-      label: "Tipo",
-    },
-    {
-      name: "precio",
-      label: "Precio",
-    },
-    {
-      name: "cantidad",
-      label: "Cantidad",
+      label: "Nombre",
     },
     {
       name: "",
@@ -71,10 +63,7 @@ export default function NiameList(props) {
     searchOpen: true,
     customToolbar: () => {
       return (
-        <CustomToolbar
-          tooltip="Agregar proveedor"
-          onClick={addProviderButton}
-        />
+        <CustomToolbar tooltip="Agregar Insumo" onClick={addProviderButton} />
       );
     },
   };
@@ -83,7 +72,7 @@ export default function NiameList(props) {
     <React.Fragment>
       <div>
         <MuiTable
-          title="Listado de Ñames"
+          title="Listado de Insumos"
           isLoading={isLoading}
           columns={columns}
           data={providers}

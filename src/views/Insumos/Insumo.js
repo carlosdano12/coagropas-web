@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import ModalContainer from "components/moleculas/ModalContainer";
-import NiameList from "components/organisms/NiameList/NiameList";
-import useNiames from "hooks/useNiames";
-import NiameForm from "components/organisms/NiameForm/NiameForm";
+import InsumoList from "components/organisms/InsumoList/InsumoList";
+import InsumoForm from "components/organisms/InsumoForm/InsumoForm";
+import useInsumos from "hooks/useInsumos";
 
-export default function Niame() {
+export default function Insumo() {
   const [isLoading, setIsLoading] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [providerId, setProviderId] = useState("");
   const [providers, setProviders] = useState([]);
-  //const { getNiames, addProvider, updateProvider } = useProvidersIM();
-  const { getNiames, addNiame, updateNiame } = useNiames();
+  const { getInsumos, addInsumo, updateInsumo } = useInsumos();
 
   const handleOnCloseModal = () => {
     setOpenModalEdit(false);
@@ -19,7 +18,7 @@ export default function Niame() {
 
   const getAllProviders = () => {
     setIsLoading(true);
-    getNiames()
+    getInsumos()
       .then((result) => {
         if (result) {
           setProviders(result);
@@ -32,9 +31,9 @@ export default function Niame() {
 
   const saveNiame = (data) => {
     if (data.id) {
-      return updateNiame(data);
+      return updateInsumo(data);
     } else {
-      return addNiame(data);
+      return addInsumo(data);
     }
   };
 
@@ -57,11 +56,11 @@ export default function Niame() {
       <Grid container justify="center" spacing={2}>
         <Grid item xs={12} sm={12}>
           <Typography variant="h5" component="h1" align="center">
-            Gestión de Tipos de ñame
+            Gestión de insumos
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={8}>
-          <NiameList
+          <InsumoList
             handleOnClickEditProvider={handleOnClickEditProvider}
             addProviderButton={addProviderButton}
             providers={providers}
@@ -70,11 +69,11 @@ export default function Niame() {
         </Grid>
 
         <ModalContainer
-          title="Crear tipo de ñame"
+          title="Crear insumo"
           open={openModalEdit}
           onClose={handleOnCloseModal}
         >
-          <NiameForm
+          <InsumoForm
             handleCloseModal={handleOnCloseModal}
             handleOnSubmit={saveNiame}
             providerId={providerId}

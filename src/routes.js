@@ -12,10 +12,10 @@ import UserProfile from "views/UserProfile/UserProfile.js";
 import POS from "views/POS";
 import Icons from "views/Icons/Icons.js";
 import Maps from "views/Maps/Maps.js";
-import NotificationsPage from "views/Notifications/Notifications.js";
 // core components/views for RTL layout
 import RTLPage from "views/RTLPage/RTLPage.js";
 import Niame from "views/Niames/Niame";
+import Insumo from "views/Insumos/Insumo";
 
 const dashboardRoutes = [
   {
@@ -61,19 +61,11 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    collapse: true,
+    path: "/insumos",
     name: "Insumos",
     icon: ShoppingBasketIcon,
-    state: "pageCollapse1",
-    views: [
-      {
-        path: "/insumos",
-        name: "Mas insumos",
-        component: NotificationsPage,
-        layout: "/admin",
-        icon: ShoppingBasketIcon,
-      },
-    ],
+    component: Insumo,
+    layout: "/admin",
   },
   {
     path: "/clientes",
