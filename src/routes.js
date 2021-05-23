@@ -16,6 +16,8 @@ import Maps from "views/Maps/Maps.js";
 import RTLPage from "views/RTLPage/RTLPage.js";
 import Niame from "views/Niames/Niame";
 import Insumo from "views/Insumos/Insumo";
+import Asociado from "views/Asociados/Asociado";
+import Cliente from "views/Clientes/Cliente";
 
 const dashboardRoutes = [
   {
@@ -29,7 +31,7 @@ const dashboardRoutes = [
     path: "/user",
     name: "Asociados",
     icon: Person,
-    component: UserProfile,
+    component: Asociado,
     layout: "/admin",
   },
   {
@@ -71,8 +73,8 @@ const dashboardRoutes = [
     path: "/clientes",
     name: "Clientes",
     icon: GroupIcon,
-    component: RTLPage,
-    layout: "/rtl",
+    component: Cliente,
+    layout: "/admin",
   },
 ];
 
