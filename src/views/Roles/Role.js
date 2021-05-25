@@ -4,14 +4,19 @@ import ModalContainer from "components/moleculas/ModalContainer";
 import useNiames from "hooks/useNiames";
 import AsociadoForm from "components/organisms/AsociadoForm/AsociadoForm";
 import AsociadoList from "components/organisms/AsociadoList/AsociadoList";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import { TextField } from "@material-ui/core";
+import useRole from "hooks/useRole";
 
-export default function Asociado() {
+export default function Role() {
   const [isLoading, setIsLoading] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [providerId, setProviderId] = useState("");
   const [providers, setProviders] = useState([]);
+  const [roles, setRoles] = useState([]);
   //const { getNiames, addProvider, updateProvider } = useProvidersIM();
   const { getNiames, addNiame, updateNiame } = useNiames();
+  const { getRoles } = useRole();
 
   const handleOnCloseModal = () => {
     setOpenModalEdit(false);
@@ -23,6 +28,19 @@ export default function Asociado() {
       .then((result) => {
         if (result) {
           setProviders(result);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const getAllRoles = () => {
+    setIsLoading(true);
+    getRoles()
+      .then((result) => {
+        if (result) {
+          setRoles(result);
         }
       })
       .finally(() => {
@@ -49,7 +67,7 @@ export default function Asociado() {
   };
 
   useEffect(() => {
-    //getAllProviders();
+    getAllRoles();
     setProviders([
       {
         nombre: "Gabriel",
@@ -77,7 +95,7 @@ export default function Asociado() {
       <Grid container justify="center" spacing={2}>
         <Grid item xs={12} sm={12}>
           <Typography variant="h5" component="h1" align="center">
-            Gestión de asociados
+            Asignación de roles
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={8}>
@@ -86,20 +104,28 @@ export default function Asociado() {
             addProviderButton={addProviderButton}
             providers={providers}
             isLoading={isLoading}
-            titleBtn="Editar"
+            titleBtn="Roles"
           />
         </Grid>
 
         <ModalContainer
-          title="Crear asociado"
+          title="Asignar roles"
           open={openModalEdit}
           onClose={handleOnCloseModal}
         >
-          <AsociadoForm
-            handleCloseModal={handleOnCloseModal}
-            handleOnSubmit={saveNiame}
-            providerId={providerId}
-            getAllProviders={getAllProviders}
+          <Autocomplete
+            multiple
+            id="tags-standard"
+            options={roles}
+            getOptionLabel={(option) => option.nombre}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="standard"
+                label="Roles"
+                placeholder="Roles"
+              />
+            )}
           />
         </ModalContainer>
       </Grid>

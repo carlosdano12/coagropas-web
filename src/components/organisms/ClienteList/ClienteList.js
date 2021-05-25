@@ -72,10 +72,9 @@ export default function ClienteList(props) {
     selectableRowsHeader: false,
     selectableRows: "none",
     viewColumns: false,
-    searchOpen: true,
     customToolbar: () => {
       return (
-        <CustomToolbar tooltip="Agregar asociado" onClick={addProviderButton} />
+        <CustomToolbar tooltip="Agregar cliente" onClick={addProviderButton} />
       );
     },
   };
@@ -84,7 +83,7 @@ export default function ClienteList(props) {
     <React.Fragment>
       <div>
         <MuiTable
-          title="Asociados"
+          title="Clientes"
           isLoading={isLoading}
           columns={columns}
           data={providers}

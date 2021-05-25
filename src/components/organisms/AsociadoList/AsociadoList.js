@@ -9,6 +9,7 @@ export default function AsociadoList(props) {
     isLoading,
     handleOnClickEditProvider,
     addProviderButton,
+    titleBtn,
   } = props;
 
   const columns = [
@@ -56,7 +57,7 @@ export default function AsociadoList(props) {
                   handleOnClickEditProvider(tableMeta.rowData[0]);
                 }}
               >
-                Editar
+                {titleBtn}
               </Button>
             </Grid>
           );
@@ -72,13 +73,9 @@ export default function AsociadoList(props) {
     selectableRowsHeader: false,
     selectableRows: "none",
     viewColumns: false,
-    searchOpen: true,
     customToolbar: () => {
       return (
-        <CustomToolbar
-          tooltip="Agregar asociado"
-          onClick={addProviderButton}
-        />
+        <CustomToolbar tooltip="Agregar asociado" onClick={addProviderButton} />
       );
     },
   };

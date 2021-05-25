@@ -10,14 +10,15 @@ import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
 import POS from "views/POS";
-import Icons from "views/Icons/Icons.js";
+import Compras from "views/Compras";
 import Maps from "views/Maps/Maps.js";
 // core components/views for RTL layout
-import RTLPage from "views/RTLPage/RTLPage.js";
 import Niame from "views/Niames/Niame";
 import Insumo from "views/Insumos/Insumo";
 import Asociado from "views/Asociados/Asociado";
 import Cliente from "views/Clientes/Cliente";
+import { RecentActors } from "@material-ui/icons";
+import Role from "views/Roles/Role";
 
 const dashboardRoutes = [
   {
@@ -32,6 +33,13 @@ const dashboardRoutes = [
     name: "Asociados",
     icon: Person,
     component: Asociado,
+    layout: "/admin",
+  },
+  {
+    path: "/roles",
+    name: "Roles",
+    icon: RecentActors,
+    component: Role,
     layout: "/admin",
   },
   {
@@ -52,7 +60,7 @@ const dashboardRoutes = [
     path: "/compras",
     name: "Compras",
     icon: ShoppingCartIcon,
-    component: Icons,
+    component: Compras,
     layout: "/admin",
   },
   {
