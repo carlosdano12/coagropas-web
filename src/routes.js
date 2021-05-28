@@ -8,7 +8,6 @@ import GroupIcon from "@material-ui/icons/Group";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
-import UserProfile from "views/UserProfile/UserProfile.js";
 import POS from "views/POS";
 import Compras from "views/Compras";
 import Maps from "views/Maps/Maps.js";
@@ -17,8 +16,9 @@ import Niame from "views/Niames/Niame";
 import Insumo from "views/Insumos/Insumo";
 import Asociado from "views/Asociados/Asociado";
 import Cliente from "views/Clientes/Cliente";
-import { RecentActors } from "@material-ui/icons";
+import { AddShoppingCart, RecentActors } from "@material-ui/icons";
 import Role from "views/Roles/Role";
+import SolicitudesCompras from "views/SolicitudesCompra/SolicitudCompra";
 
 const dashboardRoutes = [
   {
@@ -61,6 +61,13 @@ const dashboardRoutes = [
     name: "Compras",
     icon: ShoppingCartIcon,
     component: Compras,
+    layout: "/admin",
+  },
+  {
+    path: "/solicitudes_compras",
+    name: "Solicitudes de Compras",
+    icon: AddShoppingCart,
+    component: SolicitudesCompras,
     layout: "/admin",
   },
   {
