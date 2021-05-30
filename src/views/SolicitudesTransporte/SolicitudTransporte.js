@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Button, Grid, CircularProgress, Typography } from "@material-ui/core";
 import MuiTable from "../../components/moleculas/MuiTable";
-import ModalSolicitudCompra from "components/organisms/ModalSolicitudesCompra/ModalSolicitudesCompra";
-import useSolicitudesCompras from "hooks/useSolicitudCompra";
+import useSolicitudesTransporte from "hooks/useSolicitudTrasporte";
+import { Visibility } from "@material-ui/icons";
+import ModalSolicitudTransporte from "components/organisms/ModalSolicitudTransporte/ModalSolicitudTransporte";
 
-export default function SolicitudesCompras() {
+export default function SolicitudesTransporte() {
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({ limit: 10, page: 1 });
-  const [totalVentas, setTotalVentas] = useState(0);
+  const [totalVentas, setTotalTransportes] = useState(0);
   const [solicitudes, setSolicitudes] = useState([]);
-  const [solicitud, setSolicitud] = useState([]);
+  const [solicitud, setSolicitud] = useState({});
   const [openModal, setOpenModal] = useState(false);
-  const { getSolicitudesCompras } = useSolicitudesCompras();
+  const { getSolicitudesTransportes, confirmar } = useSolicitudesTransporte();
 
   const openModall = (position) => {
     setIsLoading(true);
@@ -20,13 +21,14 @@ export default function SolicitudesCompras() {
     setIsLoading(false);
   };
 
-  useEffect(() => {
+  const getSolicitudes = () => {
     setIsLoading(true);
-    getSolicitudesCompras()
+    getSolicitudesTransportes()
       .then((response) => {
         if (response) {
           setSolicitudes(response);
-          setTotalVentas(response.length);
+          console.log("me ejecute hp");
+          setTotalTransportes(response.length);
         }
       })
       .catch((err) => {
@@ -36,6 +38,9 @@ export default function SolicitudesCompras() {
       .finally(() => {
         setIsLoading(false);
       });
+  };
+  useEffect(() => {
+    getSolicitudes();
   }, [pagination]);
 
   const options = {
@@ -115,6 +120,7 @@ export default function SolicitudesCompras() {
               size="small"
               disabled={isLoading}
               color="primary"
+              startIcon={<Visibility />}
               onClick={async () => {
                 openModall(tableMeta.rowIndex);
               }}
@@ -132,12 +138,12 @@ export default function SolicitudesCompras() {
       <Grid container justify="center" spacing={2}>
         <Grid item xs={12} sm={12}>
           <Typography variant="h5" component="h1" align="center">
-            Solicitudes de compras
+            Solicitudes de transportes
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12}>
           <MuiTable
-            title="Lista de solicitudes"
+            title="Lista de transportes"
             isLoading={isLoading}
             columns={columns}
             data={solicitudes}
@@ -145,10 +151,13 @@ export default function SolicitudesCompras() {
           />
         </Grid>
       </Grid>
-      <ModalSolicitudCompra
+      <ModalSolicitudTransporte
         handleOpenModal={setOpenModal}
-        solicitudCompra={solicitud}
+        transporte={solicitud}
         openModal={openModal}
+        confirmar={confirmar}
+        getSolicitudes={getSolicitudes}
+        isLoading={isLoading}
       />
     </>
   );

@@ -10,15 +10,19 @@ import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import POS from "views/POS";
 import Compras from "views/Compras";
-import Maps from "views/Maps/Maps.js";
 // core components/views for RTL layout
 import Niame from "views/Niames/Niame";
 import Insumo from "views/Insumos/Insumo";
 import Asociado from "views/Asociados/Asociado";
 import Cliente from "views/Clientes/Cliente";
-import { AddShoppingCart, RecentActors } from "@material-ui/icons";
+import {
+  AddShoppingCart,
+  LocalShipping,
+  RecentActors,
+} from "@material-ui/icons";
 import Role from "views/Roles/Role";
 import SolicitudesCompras from "views/SolicitudesCompra/SolicitudCompra";
+import SolicitudesTransporte from "views/SolicitudesTransporte/SolicitudTransporte";
 
 const dashboardRoutes = [
   {
@@ -72,9 +76,9 @@ const dashboardRoutes = [
   },
   {
     path: "/sotck",
-    name: "Stock",
-    icon: AssessmentIcon,
-    component: Maps,
+    name: "Transportes",
+    icon: LocalShipping,
+    component: SolicitudesTransporte,
     layout: "/admin",
   },
   {
