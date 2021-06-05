@@ -4,19 +4,20 @@ import { Button, Grid, CircularProgress, Typography } from "@material-ui/core";
 import MuiTable from "../../components/moleculas/MuiTable";
 import CreateShippingModal from "../../components/organisms/CreateShippingModal";
 import ModalVenta from "./venta";
-import { useOrdersContext } from "contextApi/OrdersContext";
 
 export default function POS() {
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({ limit: 10, page: 1 });
   const [totalVentas, setTotalVentas] = useState(0);
   const [ventas, setVentas] = useState([]);
+  const [venta, setVenta] = useState({});
+  const [openModal, setOpenModal] = useState(false);
+  const [openModalVenta, setOpenModalVenta] = useState(false);
   const { getVentas } = useVentas();
-  const { setVenta, handleOpenModalVenta } = useOrdersContext();
 
   const createShipping = (position) => {
     setIsLoading(true);
-
+    setOpenModal(true);
     setVenta(ventas[position]);
     setIsLoading(false);
   };
@@ -40,12 +41,8 @@ export default function POS() {
   };
 
   useEffect(() => {
-    let m = false;
-    if (!m) handleGetOrders();
-    return () => {
-      m = true;
-    };
-  }, [pagination]);
+    handleGetOrders();
+  }, []);
 
   const options = {
     print: false,
@@ -102,6 +99,10 @@ export default function POS() {
       label: "Nota",
     },
     {
+      name: "total",
+      label: "Total",
+    },
+    {
       name: "action",
       label: "Acción",
       options: {
@@ -134,7 +135,7 @@ export default function POS() {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => handleOpenModalVenta(true)}
+            onClick={() => setOpenModalVenta(true)}
           >
             CREAR VENTA
           </Button>
@@ -149,8 +150,16 @@ export default function POS() {
           />
         </Grid>
       </Grid>
-      <CreateShippingModal getOrders={handleGetOrders} />
-      <ModalVenta />
+      <CreateShippingModal
+        venta={venta}
+        handleOpenModal={setOpenModal}
+        openModal={openModal}
+        getOrders={handleGetOrders}
+      />
+      <ModalVenta
+        openModal={openModalVenta}
+        handleOpenModal={setOpenModalVenta}
+      />
     </>
   );
 }

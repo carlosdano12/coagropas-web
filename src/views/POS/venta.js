@@ -8,29 +8,27 @@ import {
   Button,
   CircularProgress,
   Grid,
-  TextareaAutosize,
   TextField,
   Typography,
 } from "@material-ui/core";
-import { useOrdersContext } from "contextApi/OrdersContext";
 import useNiames from "hooks/useNiames";
 
 const tableIcons = {
   Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
 };
-export default function ModalVenta() {
+export default function ModalVenta({ openModal, handleOpenModal }) {
   const quantity = useRef();
   const showNotification = useCustomSnackbar();
-  const { openModalVenta, handleOpenModalVenta } = useOrdersContext();
-  //const showNotification = useCustomSnackbar();
   const [isLoading, setIsLoading] = useState(false);
   const [niame, setNiame] = useState({});
   const [niames, setNiames] = useState([]);
   const [total, setTotal] = useState(0);
   const { getNiames } = useNiames();
 
-  useEffect(async () => {
-    setNiames(await getNiames());
+  useEffect(() => {
+    getNiames().then((response) => {
+      setNiames(response);
+    });
   }, []);
 
   const columns = [
@@ -69,8 +67,8 @@ export default function ModalVenta() {
 
   return (
     <ModalContainer
-      open={openModalVenta}
-      onClose={() => handleOpenModalVenta(false)}
+      open={openModal}
+      onClose={() => handleOpenModal(false)}
       title="Crear venta"
       maxWidth="lg"
     >

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useOrdersContext } from "../../../contextApi/OrdersContext";
 import ModalContainer from "../../moleculas/ModalContainer";
 import MuiTable from "../../moleculas/MuiTable";
 import { Grid, TextField, Typography } from "@material-ui/core";
@@ -7,15 +6,15 @@ import { Grid, TextField, Typography } from "@material-ui/core";
 export default function CreateTrackingId(props) {
   const [isLoading, setIsLoading] = useState(false);
   const {
-    openModalCreateShipping,
+    openModal,
     venta,
-    handleOpenModalCreateShipping,
-  } = useOrdersContext();
+    handleOpenModal,
+  } = props;
 
   const options = {
     print: false,
     filter: false,
-    count: venta.ventaDetalles.lenght,
+    count: venta?.ventaDetalles?.lenght,
     serverSide: true,
     search: false,
     viewColumns: false,
@@ -61,8 +60,8 @@ export default function CreateTrackingId(props) {
 
   return (
     <ModalContainer
-      open={openModalCreateShipping}
-      onClose={() => handleOpenModalCreateShipping(false)}
+      open={openModal}
+      onClose={() => handleOpenModal(false)}
       title="Detalles de la venta"
       maxWidth="lg"
     >
@@ -108,7 +107,7 @@ export default function CreateTrackingId(props) {
             }}
             variant="h4"
           >
-            TOTAL = $1000
+            TOTAL = ${venta.total}
           </Typography>
         </Grid>
       </Grid>

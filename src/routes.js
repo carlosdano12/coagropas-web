@@ -8,7 +8,7 @@ import GroupIcon from "@material-ui/icons/Group";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
-import POS from "views/POS";
+import POS from "views/POS/POS";
 import Compras from "views/Compras";
 // core components/views for RTL layout
 import Niame from "views/Niames/Niame";
