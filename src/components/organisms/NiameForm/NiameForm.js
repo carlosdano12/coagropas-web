@@ -1,62 +1,57 @@
-import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  TextField,
-  Button,
-  CircularProgress,
-  FormControlLabel,
-} from "@material-ui/core";
-import Checkbox from "@material-ui/core/Checkbox";
-
+import React, { useState, useEffect, useRef } from "react";
+import { Grid, TextField, Button, CircularProgress } from "@material-ui/core";
 import useCustomSnackbar from "components/useCustomSnackbar";
+import useNiames from "hooks/useNiames";
 
 export default function NiameForm({
   handleCloseModal,
   handleOnSubmit,
-  providerId,
+  niameId,
   getAllProviders,
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const { showNotistack } = useCustomSnackbar();
+  const showNotification = useCustomSnackbar();
+  const nombre = useRef();
+  const precio = useRef();
+  const cantidad = useRef();
   //const { getProviderById } = useProvidersIM();
+  const { getNiameById } = useNiames();
 
   const onSubmit = (data) => {
     setIsLoading(true);
 
-    if (providerId) {
-      data.id = providerId;
+    if (niameId) {
+      data.id_niame = niameId;
     }
     handleOnSubmit(data)
-      .then((response) => {
-        if (response === true) {
-          showNotistack({ message: "El proveedor se guardó correctamente" });
-          getAllProviders();
-          handleCloseModal();
-        } else {
-          showNotistack({ message: "Ocurrió un error" });
-        }
+      .then(() => {
+        showNotification("El ñame se guardo correctamente", "success");
+        getAllProviders();
+        handleCloseModal();
       })
       .catch((err) => {
         console.log(err.reponse?.data);
-        showNotistack({ message: "Ocurrió un error" });
+        showNotification("Ocurrió un error", "error");
       })
       .finally(() => {
         setIsLoading(false);
       });
   };
 
-  //   useEffect(() => {
-  //     if (providerId) {
-  //       setIsLoading(true);
-  //       getProviderById(providerId)
-  //         .then((resultCategory) => {
-  //           reset(resultCategory);
-  //         })
-  //         .finally(() => {
-  //           setIsLoading(false);
-  //         });
-  //     }
-  //   }, [providerId]);
+  useEffect(() => {
+    if (niameId) {
+      setIsLoading(true);
+      getNiameById(niameId)
+        .then((response) => {
+          nombre.current.value = response.data.nombre;
+          precio.current.value = response.data.precio;
+          cantidad.current.value = response.data.cantidad;
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [niameId]);
 
   return (
     <form noValidate>
@@ -71,6 +66,7 @@ export default function NiameForm({
                 fullWidth
                 name="name"
                 label="Nombre"
+                inputRef={nombre}
                 autoComplete="name"
                 autoFocus
                 disabled={isLoading}
@@ -83,6 +79,7 @@ export default function NiameForm({
                 variant="outlined"
                 margin="normal"
                 fullWidth
+                inputRef={precio}
                 name="precio"
                 label="Precio"
                 autoComplete="precio"
@@ -94,6 +91,7 @@ export default function NiameForm({
               <TextField
                 variant="outlined"
                 margin="normal"
+                inputRef={cantidad}
                 required
                 fullWidth
                 id="cantidad"
@@ -107,11 +105,18 @@ export default function NiameForm({
         </Grid>
 
         <Button
-          type="submit"
           variant="contained"
           color="primary"
           disabled={isLoading}
           style={{ marginTop: 20 }}
+          onClick={() => {
+            onSubmit({
+              id_niame: 0,
+              nombre: nombre.current.value,
+              precio: Number(precio.current.value),
+              cantidad: Number(cantidad.current.value),
+            });
+          }}
         >
           {isLoading ? <CircularProgress size={24} /> : ""} Guardar
         </Button>

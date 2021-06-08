@@ -1,62 +1,53 @@
-import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  TextField,
-  Button,
-  CircularProgress,
-  FormControlLabel,
-} from "@material-ui/core";
-import Checkbox from "@material-ui/core/Checkbox";
-
+import React, { useState, useEffect, useRef } from "react";
+import { Grid, TextField, Button, CircularProgress } from "@material-ui/core";
 import useCustomSnackbar from "components/useCustomSnackbar";
+import useInsumos from "hooks/useInsumos";
 
 export default function InsumoForm({
   handleCloseModal,
   handleOnSubmit,
-  providerId,
+  insumoId,
   getAllProviders,
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const { showNotistack } = useCustomSnackbar();
+  const nombre = useRef();
+  const showNotification = useCustomSnackbar();
   //const { getProviderById } = useProvidersIM();
+  const { getInsumoById } = useInsumos();
 
   const onSubmit = (data) => {
     setIsLoading(true);
 
-    if (providerId) {
-      data.id = providerId;
+    if (insumoId) {
+      data.id = insumoId;
     }
     handleOnSubmit(data)
-      .then((response) => {
-        if (response === true) {
-          showNotistack({ message: "El proveedor se guardó correctamente" });
-          getAllProviders();
-          handleCloseModal();
-        } else {
-          showNotistack({ message: "Ocurrió un error" });
-        }
+      .then(() => {
+        showNotification("El insumo se guardo correctamente", "success");
+        getAllProviders();
+        handleCloseModal();
       })
       .catch((err) => {
         console.log(err.reponse?.data);
-        showNotistack({ message: "Ocurrió un error" });
+        showNotification("Ocurrió un error", "error");
       })
       .finally(() => {
         setIsLoading(false);
       });
   };
 
-  //   useEffect(() => {
-  //     if (providerId) {
-  //       setIsLoading(true);
-  //       getProviderById(providerId)
-  //         .then((resultCategory) => {
-  //           reset(resultCategory);
-  //         })
-  //         .finally(() => {
-  //           setIsLoading(false);
-  //         });
-  //     }
-  //   }, [providerId]);
+  useEffect(() => {
+    if (insumoId) {
+      setIsLoading(true);
+      getInsumoById(insumoId)
+        .then((response) => {
+          nombre.current.value = response.data.nombre;
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [insumoId]);
 
   return (
     <form noValidate>
@@ -71,6 +62,7 @@ export default function InsumoForm({
                 fullWidth
                 name="name"
                 label="Nombre"
+                inputRef={nombre}
                 autoComplete="name"
                 autoFocus
                 disabled={isLoading}
@@ -81,11 +73,13 @@ export default function InsumoForm({
         </Grid>
 
         <Button
-          type="submit"
           variant="contained"
           color="primary"
           disabled={isLoading}
           style={{ marginTop: 20 }}
+          onClick={() => {
+            onSubmit({ id: 0, nombre: nombre.current.value });
+          }}
         >
           {isLoading ? <CircularProgress size={24} /> : ""} Guardar
         </Button>

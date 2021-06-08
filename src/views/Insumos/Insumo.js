@@ -8,7 +8,7 @@ import useInsumos from "hooks/useInsumos";
 export default function Insumo() {
   const [isLoading, setIsLoading] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
-  const [providerId, setProviderId] = useState("");
+  const [insumoId, setInsumoId] = useState("");
   const [providers, setProviders] = useState([]);
   const { getInsumos, addInsumo, updateInsumo } = useInsumos();
 
@@ -37,13 +37,13 @@ export default function Insumo() {
     }
   };
 
-  const handleOnClickEditProvider = (warehouseId) => {
-    setProviderId(warehouseId);
+  const handleOnClickEditProvider = (insumoId) => {
+    setInsumoId(insumoId);
     setOpenModalEdit(true);
   };
 
   const addProviderButton = () => {
-    setProviderId("");
+    setInsumoId("");
     setOpenModalEdit(true);
   };
 
@@ -76,7 +76,7 @@ export default function Insumo() {
           <InsumoForm
             handleCloseModal={handleOnCloseModal}
             handleOnSubmit={saveNiame}
-            providerId={providerId}
+            insumoId={insumoId}
             getAllProviders={getAllProviders}
           />
         </ModalContainer>

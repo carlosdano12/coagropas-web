@@ -12,18 +12,21 @@ import {
   Typography,
 } from "@material-ui/core";
 import useNiames from "hooks/useNiames";
+import useVentas from "../../hooks/useOrders";
 
 const tableIcons = {
   Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
 };
-export default function ModalVenta({ openModal, handleOpenModal }) {
+export default function ModalVenta({ openModal, handleOpenModal, getOrders }) {
   const quantity = useRef();
+  const nota = useRef();
   const showNotification = useCustomSnackbar();
   const [isLoading, setIsLoading] = useState(false);
   const [niame, setNiame] = useState({});
   const [niames, setNiames] = useState([]);
   const [total, setTotal] = useState(0);
   const { getNiames } = useNiames();
+  const { getVentas, crearVenta } = useVentas();
 
   useEffect(() => {
     getNiames().then((response) => {
@@ -45,7 +48,6 @@ export default function ModalVenta({ openModal, handleOpenModal }) {
 
   const addRow = () => {
     if (!niame) {
-      console.log("ntra aquie asd", niame);
       showNotification("Todos los campos son obligatorios", "warning");
     } else {
       setData([
@@ -61,10 +63,28 @@ export default function ModalVenta({ openModal, handleOpenModal }) {
       setTotal(total + Number(quantity.current.value) * Number(niame.precio));
       setNiame({});
       quantity.current.value = "";
-      console.log("data index", data);
     }
   };
 
+  const finalizar = () => {
+    setIsLoading(true);
+    crearVenta({
+      nota: nota.current.value,
+      total: total,
+      ventaDetalles: data,
+    })
+      .then(() => {
+        showNotification("Venta registrada correctamente", "success");
+        setIsLoading(false);
+        setData([]);
+        nota.current.value = "";
+        setTotal(0);
+        getOrders();
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  };
   return (
     <ModalContainer
       open={openModal}
@@ -122,7 +142,7 @@ export default function ModalVenta({ openModal, handleOpenModal }) {
             size="large"
             variant="contained"
             color="primary"
-            onClick={addRow}
+            onClick={finalizar}
           >
             Finalizar
           </Button>
@@ -178,7 +198,7 @@ export default function ModalVenta({ openModal, handleOpenModal }) {
         }}
       />
       <br />
-      <TextField fullWidth label="Nota:" variant="outlined" />
+      <TextField fullWidth label="Nota:" inputRef={nota} variant="outlined" />
     </ModalContainer>
   );
 }

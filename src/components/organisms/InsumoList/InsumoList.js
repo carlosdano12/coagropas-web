@@ -60,7 +60,6 @@ export default function InsumoList(props) {
     selectableRowsHeader: false,
     selectableRows: "none",
     viewColumns: false,
-    searchOpen: true,
     customToolbar: () => {
       return (
         <CustomToolbar tooltip="Agregar Insumo" onClick={addProviderButton} />

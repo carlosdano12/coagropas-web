@@ -159,6 +159,7 @@ export default function POS() {
       <ModalVenta
         openModal={openModalVenta}
         handleOpenModal={setOpenModalVenta}
+        getOrders={handleGetOrders}
       />
     </>
   );

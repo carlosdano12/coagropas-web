@@ -13,7 +13,7 @@ export default function NiameList(props) {
 
   const columns = [
     {
-      name: "id",
+      name: "id_niame",
       label: "id",
       options: {
         display: "false",
@@ -68,7 +68,7 @@ export default function NiameList(props) {
     selectableRowsHeader: false,
     selectableRows: "none",
     viewColumns: false,
-    searchOpen: true,
+    searchOpen: false,
     customToolbar: () => {
       return (
         <CustomToolbar

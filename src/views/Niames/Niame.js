@@ -8,7 +8,7 @@ import NiameForm from "components/organisms/NiameForm/NiameForm";
 export default function Niame() {
   const [isLoading, setIsLoading] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
-  const [providerId, setProviderId] = useState("");
+  const [niameId, setNiameId] = useState("");
   const [providers, setProviders] = useState([]);
   //const { getNiames, addProvider, updateProvider } = useProvidersIM();
   const { getNiames, addNiame, updateNiame } = useNiames();
@@ -31,20 +31,20 @@ export default function Niame() {
   };
 
   const saveNiame = (data) => {
-    if (data.id) {
+    if (data.id_niame) {
       return updateNiame(data);
     } else {
       return addNiame(data);
     }
   };
 
-  const handleOnClickEditProvider = (warehouseId) => {
-    setProviderId(warehouseId);
+  const handleOnClickEditProvider = (niameId) => {
+    setNiameId(niameId);
     setOpenModalEdit(true);
   };
 
   const addProviderButton = () => {
-    setProviderId("");
+    setNiameId("");
     setOpenModalEdit(true);
   };
 
@@ -77,7 +77,7 @@ export default function Niame() {
           <NiameForm
             handleCloseModal={handleOnCloseModal}
             handleOnSubmit={saveNiame}
-            providerId={providerId}
+            niameId={niameId}
             getAllProviders={getAllProviders}
           />
         </ModalContainer>

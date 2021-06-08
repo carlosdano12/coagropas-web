@@ -14,16 +14,22 @@ export default function useNiames() {
     return (await axios.get(`${URL_NIAME}`, { headers })).data;
   };
 
+  const getNiameById = async (id) => {
+    return axios.get(`${URL_NIAME}/${id}`, { headers });
+  };
+
   const addNiame = async (data) => {
     return (await axios.post(URL_NIAME, data, { headers })).data;
   };
 
   const updateNiame = async (data) => {
-    return (await axios.put(URL_NIAME, data, { headers })).data;
+    return (await axios.put(`${URL_NIAME}/${data.id_niame}`, data, { headers }))
+      .data;
   };
 
   return {
     getNiames,
+    getNiameById,
     addNiame,
     updateNiame,
   };

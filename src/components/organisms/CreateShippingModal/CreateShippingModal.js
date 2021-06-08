@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import ModalContainer from "../../moleculas/ModalContainer";
 import MuiTable from "../../moleculas/MuiTable";
-import { Grid, TextField, Typography } from "@material-ui/core";
+import { Button, Grid, TextField, Typography } from "@material-ui/core";
 
 export default function CreateTrackingId(props) {
   const [isLoading, setIsLoading] = useState(false);
-  const {
-    openModal,
-    venta,
-    handleOpenModal,
-  } = props;
+  const { openModal, venta, handleOpenModal } = props;
 
   const options = {
     print: false,
@@ -56,6 +52,14 @@ export default function CreateTrackingId(props) {
       name: "cantidad",
       label: "Cantidad",
     },
+    {
+      name: "precio",
+      label: "Precio",
+    },
+    {
+      name: "total",
+      label: "Total",
+    },
   ];
 
   return (
@@ -66,7 +70,7 @@ export default function CreateTrackingId(props) {
       maxWidth="lg"
     >
       <Grid container justify="center" spacing={2}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={2}>
           <TextField
             fullWidth
             label="fecha"
@@ -78,7 +82,7 @@ export default function CreateTrackingId(props) {
           />
         </Grid>
         {/* name order number with prefix */}
-        <Grid item xs={12} sm={6} md={2}>
+        <Grid item xs={12} sm={6} md={4}>
           <TextField
             fullWidth
             label="nota"
@@ -109,6 +113,15 @@ export default function CreateTrackingId(props) {
           >
             TOTAL = ${venta.total}
           </Typography>
+        </Grid>
+        <Grid item xs={12} sm={6} md={2}>
+          <Button
+            variant="contained"
+            color="inherit"
+            onClick={() => handleOpenModal(false)}
+          >
+            cerrar
+          </Button>
         </Grid>
       </Grid>
     </ModalContainer>

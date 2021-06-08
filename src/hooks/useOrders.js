@@ -14,16 +14,16 @@ export default function useVentas() {
   const getVentas = async () => {
     return await getAllVentas({ jwt });
   };
-  const getOrdersByOrderNumber = async (orderNumber) => {
-    return axios
-      .get(`${URL_VENTAS}/packages/${orderNumber}`, { headers })
-      .then((response) => {
-        return response.data;
-      });
+
+  const crearVenta = async (data) => {
+    const response = await axios.post(URL_VENTAS, data, { headers });
+    if (response) {
+      return response.data;
+    }
   };
 
   return {
     getVentas,
-    getOrdersByOrderNumber,
+    crearVenta,
   };
 }
