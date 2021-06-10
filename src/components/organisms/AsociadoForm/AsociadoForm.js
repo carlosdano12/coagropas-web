@@ -1,44 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Grid,
   TextField,
   Button,
   CircularProgress,
-  FormControlLabel,
+  FormControl,
+  InputAdornment,
 } from "@material-ui/core";
-import Checkbox from "@material-ui/core/Checkbox";
 
 import useCustomSnackbar from "components/useCustomSnackbar";
+import { InputLabel } from "@material-ui/core";
+import { OutlinedInput } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 
 export default function AsociadoForm({
   handleCloseModal,
   handleOnSubmit,
-  providerId,
-  getAllProviders,
+  asociadoId,
+  getAllAsociados,
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const { showNotistack } = useCustomSnackbar();
+  const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState("");
+  const showNotification = useCustomSnackbar();
+  const nombre = useRef();
+  const apellido = useRef();
+  const documento = useRef();
+  const telefono = useRef();
+
   //const { getProviderById } = useProvidersIM();
 
   const onSubmit = (data) => {
     setIsLoading(true);
 
-    if (providerId) {
-      data.id = providerId;
+    if (asociadoId) {
+      data.id_asociado = asociadoId;
     }
     handleOnSubmit(data)
-      .then((response) => {
-        if (response === true) {
-          showNotistack({ message: "El proveedor se guardó correctamente" });
-          getAllProviders();
-          handleCloseModal();
-        } else {
-          showNotistack({ message: "Ocurrió un error" });
-        }
+      .then(() => {
+        showNotification("El asociado se guardo correctamente", "success");
+        getAllAsociados();
+        handleCloseModal();
       })
       .catch((err) => {
         console.log(err.reponse?.data);
-        showNotistack({ message: "Ocurrió un error" });
+        showNotification("Ocurrió un error", "error");
       })
       .finally(() => {
         setIsLoading(false);
@@ -46,9 +53,9 @@ export default function AsociadoForm({
   };
 
   //   useEffect(() => {
-  //     if (providerId) {
+  //     if (asociadoId) {
   //       setIsLoading(true);
-  //       getProviderById(providerId)
+  //       getProviderById(asociadoId)
   //         .then((resultCategory) => {
   //           reset(resultCategory);
   //         })
@@ -56,7 +63,7 @@ export default function AsociadoForm({
   //           setIsLoading(false);
   //         });
   //     }
-  //   }, [providerId]);
+  //   }, [asociadoId]);
 
   return (
     <form noValidate>
@@ -69,9 +76,8 @@ export default function AsociadoForm({
                 variant="outlined"
                 margin="normal"
                 fullWidth
-                name="name"
                 label="Nombre"
-                autoComplete="name"
+                inputRef={nombre}
                 autoFocus
                 disabled={isLoading}
                 InputLabelProps={{ shrink: true }}
@@ -83,8 +89,8 @@ export default function AsociadoForm({
                 variant="outlined"
                 margin="normal"
                 fullWidth
-                name="apellido"
                 label="Apellido"
+                inputRef={apellido}
                 autoComplete="precio"
                 disabled={isLoading}
                 InputLabelProps={{ shrink: true }}
@@ -96,9 +102,9 @@ export default function AsociadoForm({
                 variant="outlined"
                 margin="normal"
                 fullWidth
-                name="documento"
                 label="Documento"
-                autoComplete="precio"
+                inputRef={documento}
+                autoComplete="documento"
                 disabled={isLoading}
                 InputLabelProps={{ shrink: true }}
               />
@@ -110,12 +116,36 @@ export default function AsociadoForm({
                 margin="normal"
                 required
                 fullWidth
-                id="cantidad"
                 label="Telefono"
-                name="telefono"
+                inputRef={telefono}
                 disabled={isLoading}
                 InputLabelProps={{ shrink: true }}
               />
+            </Grid>
+            <Grid item xs={8}>
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Contraseña
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  labelWidth={80}
+                />
+              </FormControl>
             </Grid>
           </Grid>
         </Grid>
@@ -126,6 +156,16 @@ export default function AsociadoForm({
           color="primary"
           disabled={isLoading}
           style={{ marginTop: 20 }}
+          onClick={() => {
+            onSubmit({
+              id_asociado: "",
+              nombre: nombre.current.value,
+              apellido: apellido.current.value,
+              documento: documento.current.value,
+              contrasena: password,
+              telefono: telefono.current.value,
+            });
+          }}
         >
           {isLoading ? <CircularProgress size={24} /> : ""} Guardar
         </Button>

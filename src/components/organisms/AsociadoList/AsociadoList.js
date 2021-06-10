@@ -5,7 +5,7 @@ import CustomToolbar from "components/moleculas/CustomToolBar/CustomToolBar";
 
 export default function AsociadoList(props) {
   const {
-    providers,
+    asociados,
     isLoading,
     handleOnClickEditProvider,
     addProviderButton,
@@ -14,7 +14,7 @@ export default function AsociadoList(props) {
 
   const columns = [
     {
-      name: "id",
+      name: "id_asociado",
       label: "id",
       options: {
         display: "false",
@@ -87,7 +87,7 @@ export default function AsociadoList(props) {
           title="Asociados"
           isLoading={isLoading}
           columns={columns}
-          data={providers}
+          data={asociados}
           options={options}
         />
       </div>

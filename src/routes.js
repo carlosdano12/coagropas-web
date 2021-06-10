@@ -1,6 +1,6 @@
 import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
-import AssessmentIcon from "@material-ui/icons/Assessment";
+import ContactsIcon from "@material-ui/icons/Contacts";
 import StoreIcon from "@material-ui/icons/Store";
 import LayersIcon from "@material-ui/icons/Layers";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
@@ -23,6 +23,7 @@ import {
 import Role from "views/Roles/Role";
 import SolicitudesCompras from "views/SolicitudesCompra/SolicitudCompra";
 import SolicitudesTransporte from "views/SolicitudesTransporte/SolicitudTransporte";
+import AsociadoRequest from "views/AsociadosRequest/AsociadoRequest";
 
 const dashboardRoutes = [
   {
@@ -37,6 +38,13 @@ const dashboardRoutes = [
     name: "Asociados",
     icon: Person,
     component: Asociado,
+    layout: "/admin",
+  },
+  {
+    path: "/asociados/solicitudes",
+    name: "Solicitudes de Asociación",
+    icon: ContactsIcon,
+    component: AsociadoRequest,
     layout: "/admin",
   },
   {

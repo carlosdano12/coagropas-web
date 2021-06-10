@@ -101,6 +101,11 @@ export default function POS() {
     {
       name: "total",
       label: "Total",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => (
+          <div style={{ fontSize: 15 }}>${value}</div>
+        ),
+      },
     },
     {
       name: "action",

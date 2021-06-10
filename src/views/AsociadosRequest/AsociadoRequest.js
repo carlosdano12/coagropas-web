@@ -5,7 +5,7 @@ import AsociadoForm from "components/organisms/AsociadoForm/AsociadoForm";
 import AsociadoList from "components/organisms/AsociadoList/AsociadoList";
 import useAsociados from "hooks/useAsociados";
 
-export default function Asociado() {
+export default function AsociadoRequest() {
   const [isLoading, setIsLoading] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [asociadoId, setasociadoId] = useState("");

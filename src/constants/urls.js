@@ -8,3 +8,4 @@ export const URL_INSUMO = `${URL_BASE}/insumos`;
 export const URL_ROLES = `${URL_BASE}/roles`;
 export const URL_SOLICITUDES_TRANSPORTES = `${URL_BASE}/transporte/solicitudes`;
 export const URL_SOLICITUDES_RECIBIR = `${URL_BASE}/transporte/recibir/confirmar`;
+export const URL_ASOCIADOS = `${URL_BASE}/associates`;
