@@ -26,6 +26,11 @@ export default function useAsociados() {
     return (await axios.post(URL_ASOCIADOS, data, { headers })).data;
   };
 
+  const addAsociadoRequest = async (data) => {
+    return (await axios.post(`${URL_ASOCIADOS}/request`, data, { headers }))
+      .data;
+  };
+
   const updateAsociado = async (data) => {
     return (await axios.put(`${URL_ASOCIADOS}/${data.id}`, data, { headers }))
       .data;
@@ -36,6 +41,7 @@ export default function useAsociados() {
     getAsociadosRequest,
     getAsociadoById,
     addAsociado,
+    addAsociadoRequest,
     updateAsociado,
   };
 }

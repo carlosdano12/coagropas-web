@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import ModalContainer from "components/moleculas/ModalContainer";
-import AsociadoForm from "components/organisms/AsociadoForm/AsociadoForm";
-import AsociadoList from "components/organisms/AsociadoList/AsociadoList";
 import useAsociados from "hooks/useAsociados";
+import AsociadoRequestList from "components/organisms/AsociadoRequestList/AsociadoRequestList";
+import AsociadoRequestForm from "components/organisms/AsociadoRequestForm/AsociadoRequestForm";
 
 export default function AsociadoRequest() {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +11,11 @@ export default function AsociadoRequest() {
   const [asociadoId, setasociadoId] = useState("");
   const [asociados, setAsociados] = useState([]);
   //const { getNiames, addProvider, updateProvider } = useProvidersIM();
-  const { getAsociados, addAsociado, updateAsociado } = useAsociados();
+  const {
+    getAsociadosRequest,
+    addAsociadoRequest,
+    updateAsociado,
+  } = useAsociados();
 
   const handleOnCloseModal = () => {
     setOpenModalEdit(false);
@@ -19,7 +23,7 @@ export default function AsociadoRequest() {
 
   const getAllAsociados = () => {
     setIsLoading(true);
-    getAsociados()
+    getAsociadosRequest()
       .then((result) => {
         if (result) {
           setAsociados(result);
@@ -31,10 +35,10 @@ export default function AsociadoRequest() {
   };
 
   const saveAsociado = (data) => {
-    if (data.id_asociado) {
+    if (data.id) {
       return updateAsociado(data);
     } else {
-      return addAsociado(data);
+      return addAsociadoRequest(data);
     }
   };
 
@@ -57,11 +61,11 @@ export default function AsociadoRequest() {
       <Grid container justify="center" spacing={2}>
         <Grid item xs={12} sm={12}>
           <Typography variant="h5" component="h1" align="center">
-            Gestión de asociados
+            Gestión de solicitudes de asociados
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={12} md={8}>
-          <AsociadoList
+        <Grid item xs={12} sm={12} md={10}>
+          <AsociadoRequestList
             handleOnClickEditProvider={handleOnClickEditProvider}
             addProviderButton={addProviderButton}
             asociados={asociados}
@@ -75,7 +79,7 @@ export default function AsociadoRequest() {
           open={openModalEdit}
           onClose={handleOnCloseModal}
         >
-          <AsociadoForm
+          <AsociadoRequestForm
             handleCloseModal={handleOnCloseModal}
             handleOnSubmit={saveAsociado}
             asociadoId={asociadoId}
