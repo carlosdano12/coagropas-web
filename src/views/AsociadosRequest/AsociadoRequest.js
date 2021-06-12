@@ -14,7 +14,7 @@ export default function AsociadoRequest() {
   const {
     getAsociadosRequest,
     addAsociadoRequest,
-    updateAsociado,
+    updateAsociadoRequest,
   } = useAsociados();
 
   const handleOnCloseModal = () => {
@@ -36,7 +36,7 @@ export default function AsociadoRequest() {
 
   const saveAsociado = (data) => {
     if (data.id) {
-      return updateAsociado(data);
+      return updateAsociadoRequest(data);
     } else {
       return addAsociadoRequest(data);
     }

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Grid, TextField, Button, CircularProgress } from "@material-ui/core";
 
 import useCustomSnackbar from "components/useCustomSnackbar";
+import useAsociados from "hooks/useAsociados";
 
 export default function AsociadoRequestForm({
   handleCloseModal,
@@ -10,15 +11,13 @@ export default function AsociadoRequestForm({
   getAllAsociados,
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [descripcion, setDescripcion] = useState("");
   const showNotification = useCustomSnackbar();
   const nombre = useRef();
   const apellido = useRef();
   const documento = useRef();
   const telefono = useRef();
-
-  //const { getProviderById } = useProvidersIM();
+  const { getAsociadoRequestById } = useAsociados();
 
   const onSubmit = (data) => {
     setIsLoading(true);
@@ -41,18 +40,23 @@ export default function AsociadoRequestForm({
       });
   };
 
-  //   useEffect(() => {
-  //     if (asociadoId) {
-  //       setIsLoading(true);
-  //       getProviderById(asociadoId)
-  //         .then((resultCategory) => {
-  //           reset(resultCategory);
-  //         })
-  //         .finally(() => {
-  //           setIsLoading(false);
-  //         });
-  //     }
-  //   }, [asociadoId]);
+  useEffect(() => {
+    if (asociadoId) {
+      setIsLoading(true);
+      getAsociadoRequestById(asociadoId)
+        .then((response) => {
+          console.log("res", response);
+          nombre.current.value = response.nombre;
+          apellido.current.value = response.apellido;
+          documento.current.value = response.documento;
+          telefono.current.value = response.telefono;
+          setDescripcion(response.descripcion);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [asociadoId]);
 
   return (
     <form noValidate>

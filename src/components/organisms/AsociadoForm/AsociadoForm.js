@@ -13,6 +13,7 @@ import { InputLabel } from "@material-ui/core";
 import { OutlinedInput } from "@material-ui/core";
 import { IconButton } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+import useAsociados from "hooks/useAsociados";
 
 export default function AsociadoForm({
   handleCloseModal,
@@ -28,8 +29,7 @@ export default function AsociadoForm({
   const apellido = useRef();
   const documento = useRef();
   const telefono = useRef();
-
-  //const { getProviderById } = useProvidersIM();
+  const { getAsociadoById } = useAsociados();
 
   const onSubmit = (data) => {
     setIsLoading(true);
@@ -52,18 +52,21 @@ export default function AsociadoForm({
       });
   };
 
-  //   useEffect(() => {
-  //     if (asociadoId) {
-  //       setIsLoading(true);
-  //       getProviderById(asociadoId)
-  //         .then((resultCategory) => {
-  //           reset(resultCategory);
-  //         })
-  //         .finally(() => {
-  //           setIsLoading(false);
-  //         });
-  //     }
-  //   }, [asociadoId]);
+  useEffect(() => {
+    if (asociadoId) {
+      setIsLoading(true);
+      getAsociadoById(asociadoId)
+        .then((response) => {
+          nombre.current.value = response.data.nombre;
+          apellido.current.value = response.data.apellido;
+          documento.current.value = response.data.documento;
+          telefono.current.value = response.data.telefono;
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [asociadoId]);
 
   return (
     <form noValidate>

@@ -19,7 +19,7 @@ export default function useAsociados() {
   };
 
   const getAsociadoById = async (id) => {
-    return axios.get(`${URL_ASOCIADOS}/${id}`, { headers });
+    return axios.get(`${URL_ASOCIADOS}/registrado/${id}`, { headers });
   };
 
   const addAsociado = async (data) => {
@@ -31,17 +31,35 @@ export default function useAsociados() {
       .data;
   };
 
-  const updateAsociado = async (data) => {
-    return (await axios.put(`${URL_ASOCIADOS}/${data.id}`, data, { headers }))
+  const getAsociadoRequestById = async (id) => {
+    return (await axios.get(`${URL_ASOCIADOS}/request/${id}`, { headers }))
       .data;
+  };
+
+  const updateAsociado = async (data) => {
+    return (
+      await axios.put(`${URL_ASOCIADOS}/registrado/${data.id_asociado}`, data, {
+        headers,
+      })
+    ).data;
+  };
+
+  const updateAsociadoRequest = async (data) => {
+    return (
+      await axios.put(`${URL_ASOCIADOS}/request/${data.id}`, data, {
+        headers,
+      })
+    ).data;
   };
 
   return {
     getAsociados,
     getAsociadosRequest,
     getAsociadoById,
+    getAsociadoRequestById,
     addAsociado,
     addAsociadoRequest,
     updateAsociado,
+    updateAsociadoRequest,
   };
 }

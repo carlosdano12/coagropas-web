@@ -14,7 +14,7 @@ export default function AsociadoRequestList(props) {
 
   const columns = [
     {
-      name: "id_asociado",
+      name: "id",
       label: "id",
       options: {
         display: "false",
