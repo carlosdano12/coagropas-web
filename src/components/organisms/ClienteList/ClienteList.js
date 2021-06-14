@@ -5,7 +5,7 @@ import CustomToolbar from "components/moleculas/CustomToolBar/CustomToolBar";
 
 export default function ClienteList(props) {
   const {
-    providers,
+    clientes,
     isLoading,
     handleOnClickEditProvider,
     addProviderButton,
@@ -86,7 +86,7 @@ export default function ClienteList(props) {
           title="Clientes"
           isLoading={isLoading}
           columns={columns}
-          data={providers}
+          data={clientes}
           options={options}
         />
       </div>

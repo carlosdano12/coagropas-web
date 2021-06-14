@@ -1,28 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import ModalContainer from "components/moleculas/ModalContainer";
-import useNiames from "hooks/useNiames";
 import ClienteForm from "components/organisms/ClienteForm/ClienteForm";
 import ClienteList from "components/organisms/ClienteList/ClienteList";
+import useClientes from "hooks/useClientes";
 
 export default function Cliente() {
   const [isLoading, setIsLoading] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
   const [providerId, setProviderId] = useState("");
-  const [providers, setProviders] = useState([]);
-  //const { getNiames, addProvider, updateProvider } = useProvidersIM();
-  const { getNiames, addNiame, updateNiame } = useNiames();
+  const [clientes, setClientes] = useState([]);
+  const { getClientes, addCliente, updateCliente } = useClientes();
 
   const handleOnCloseModal = () => {
     setOpenModalEdit(false);
   };
 
-  const getAllProviders = () => {
+  const getAllClientes = () => {
     setIsLoading(true);
-    getNiames()
+    getClientes()
       .then((result) => {
         if (result) {
-          setProviders(result);
+          setClientes(result);
         }
       })
       .finally(() => {
@@ -30,16 +29,16 @@ export default function Cliente() {
       });
   };
 
-  const saveNiame = (data) => {
+  const saveCliente = (data) => {
     if (data.id) {
-      return updateNiame(data);
+      return updateCliente(data);
     } else {
-      return addNiame(data);
+      return addCliente(data);
     }
   };
 
-  const handleOnClickEditProvider = (warehouseId) => {
-    setProviderId(warehouseId);
+  const handleOnClickEditProvider = (clienteId) => {
+    setProviderId(clienteId);
     setOpenModalEdit(true);
   };
 
@@ -49,27 +48,7 @@ export default function Cliente() {
   };
 
   useEffect(() => {
-    //getAllProviders();
-    setProviders([
-      {
-        nombre: "Gabriel",
-        apellido: "Atencia Gomez",
-        telefono: "3013807818",
-        documento: "1233456789",
-      },
-      {
-        nombre: "Carlos",
-        apellido: "Salazar",
-        telefono: "7894520",
-        documento: "1233456789",
-      },
-      {
-        nombre: "Jose",
-        apellido: "Morales",
-        telefono: "78922645",
-        documento: "1233456789",
-      },
-    ]);
+    getAllClientes();
   }, []);
 
   return (
@@ -77,14 +56,14 @@ export default function Cliente() {
       <Grid container justify="center" spacing={2}>
         <Grid item xs={12} sm={12}>
           <Typography variant="h5" component="h1" align="center">
-            Gestión de clienes
+            Gestión de clientes
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={8}>
           <ClienteList
             handleOnClickEditProvider={handleOnClickEditProvider}
             addProviderButton={addProviderButton}
-            providers={providers}
+            clientes={clientes}
             isLoading={isLoading}
           />
         </Grid>
@@ -96,9 +75,9 @@ export default function Cliente() {
         >
           <ClienteForm
             handleCloseModal={handleOnCloseModal}
-            handleOnSubmit={saveNiame}
+            handleOnSubmit={saveCliente}
             providerId={providerId}
-            getAllProviders={getAllProviders}
+            getAllClientes={getAllClientes}
           />
         </ModalContainer>
       </Grid>

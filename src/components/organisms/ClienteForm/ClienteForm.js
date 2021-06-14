@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Grid,
   TextField,
@@ -9,16 +9,21 @@ import {
 import Checkbox from "@material-ui/core/Checkbox";
 
 import useCustomSnackbar from "components/useCustomSnackbar";
+import useClientes from "hooks/useClientes";
 
 export default function ClienteForm({
   handleCloseModal,
   handleOnSubmit,
   providerId,
-  getAllProviders,
+  getAllClientes,
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const { showNotistack } = useCustomSnackbar();
-  //const { getProviderById } = useProvidersIM();
+  const nombre = useRef();
+  const apellido = useRef();
+  const documento = useRef();
+  const telefono = useRef();
+  const { getClienteById } = useClientes();
+  const showNotification = useCustomSnackbar();
 
   const onSubmit = (data) => {
     setIsLoading(true);
@@ -27,36 +32,35 @@ export default function ClienteForm({
       data.id = providerId;
     }
     handleOnSubmit(data)
-      .then((response) => {
-        if (response === true) {
-          showNotistack({ message: "El proveedor se guardó correctamente" });
-          getAllProviders();
-          handleCloseModal();
-        } else {
-          showNotistack({ message: "Ocurrió un error" });
-        }
+      .then(() => {
+        showNotification("El cliente se guardo correctamente", "success");
+        getAllClientes();
+        handleCloseModal();
       })
       .catch((err) => {
         console.log(err.reponse?.data);
-        showNotistack({ message: "Ocurrió un error" });
+        showNotification("Ocurrió un error", "error");
       })
       .finally(() => {
         setIsLoading(false);
       });
   };
 
-  //   useEffect(() => {
-  //     if (providerId) {
-  //       setIsLoading(true);
-  //       getProviderById(providerId)
-  //         .then((resultCategory) => {
-  //           reset(resultCategory);
-  //         })
-  //         .finally(() => {
-  //           setIsLoading(false);
-  //         });
-  //     }
-  //   }, [providerId]);
+  useEffect(() => {
+    if (providerId) {
+      setIsLoading(true);
+      getClienteById(providerId)
+        .then((response) => {
+          nombre.current.value = response.data.nombre;
+          apellido.current.value = response.data.apellido;
+          documento.current.value = response.data.documento;
+          telefono.current.value = response.data.telefono;
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [providerId]);
 
   return (
     <form noValidate>
@@ -71,6 +75,7 @@ export default function ClienteForm({
                 fullWidth
                 name="name"
                 label="Nombre"
+                inputRef={nombre}
                 autoComplete="name"
                 autoFocus
                 disabled={isLoading}
@@ -85,7 +90,8 @@ export default function ClienteForm({
                 fullWidth
                 name="apellido"
                 label="Apellido"
-                autoComplete="precio"
+                inputRef={apellido}
+                autoComplete="apellido"
                 disabled={isLoading}
                 InputLabelProps={{ shrink: true }}
               />
@@ -98,7 +104,8 @@ export default function ClienteForm({
                 fullWidth
                 name="documento"
                 label="Documento"
-                autoComplete="precio"
+                inputRef={documento}
+                autoComplete="documento"
                 disabled={isLoading}
                 InputLabelProps={{ shrink: true }}
               />
@@ -112,6 +119,7 @@ export default function ClienteForm({
                 fullWidth
                 id="cantidad"
                 label="Telefono"
+                inputRef={telefono}
                 name="telefono"
                 disabled={isLoading}
                 InputLabelProps={{ shrink: true }}
@@ -126,6 +134,15 @@ export default function ClienteForm({
           color="primary"
           disabled={isLoading}
           style={{ marginTop: 20 }}
+          onClick={() => {
+            onSubmit({
+              id: "",
+              nombre: nombre.current.value,
+              apellido: apellido.current.value,
+              documento: documento.current.value,
+              telefono: telefono.current.value,
+            });
+          }}
         >
           {isLoading ? <CircularProgress size={24} /> : ""} Guardar
         </Button>

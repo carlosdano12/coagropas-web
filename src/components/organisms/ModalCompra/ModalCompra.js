@@ -3,14 +3,14 @@ import ModalContainer from "../../moleculas/ModalContainer";
 import MuiTable from "../../moleculas/MuiTable";
 import { Button, Grid, TextField, Typography } from "@material-ui/core";
 
-export default function CreateTrackingId(props) {
+export default function ModalCompraDetalle(props) {
   const [isLoading, setIsLoading] = useState(false);
-  const { openModal, venta, handleOpenModal } = props;
+  const { openModal, compra, handleOpenModal } = props;
 
   const options = {
     print: false,
     filter: false,
-    count: venta?.ventaDetalles?.lenght,
+    count: compra?.compraDetalles?.lenght,
     serverSide: true,
     search: false,
     viewColumns: false,
@@ -38,8 +38,8 @@ export default function CreateTrackingId(props) {
     },
     // 3 date_created -> Fecha del pedido
     {
-      name: "niame",
-      label: "Ñame",
+      name: "insumo",
+      label: "Insumo",
       options: {
         filter: true,
         sort: true,
@@ -66,7 +66,7 @@ export default function CreateTrackingId(props) {
     <ModalContainer
       open={openModal}
       onClose={() => handleOpenModal(false)}
-      title="Detalles de la venta"
+      title="Detalles de la compra"
       maxWidth="lg"
     >
       <Grid container justify="center" spacing={2}>
@@ -74,7 +74,7 @@ export default function CreateTrackingId(props) {
           <TextField
             fullWidth
             label="fecha"
-            value={venta.fechaVenta}
+            value={compra.fechaCompra}
             InputProps={{
               readOnly: true,
             }}
@@ -86,7 +86,7 @@ export default function CreateTrackingId(props) {
           <TextField
             fullWidth
             label="nota"
-            value={venta.nota}
+            value={compra.nota}
             InputProps={{
               readOnly: true,
             }}
@@ -99,7 +99,7 @@ export default function CreateTrackingId(props) {
             title=""
             isLoading={isLoading}
             columns={columns}
-            data={venta.ventaDetalles}
+            data={compra.compraDetalles}
             options={options}
           />
         </Grid>
@@ -112,7 +112,7 @@ export default function CreateTrackingId(props) {
               }}
               variant="h4"
             >
-              TOTAL = ${venta.total}
+              TOTAL = ${compra.total}
             </Typography>
           </Grid>
         </Grid>

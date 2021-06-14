@@ -12,25 +12,33 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { useOrdersContext } from "contextApi/OrdersContext";
-import useNiames from "hooks/useNiames";
+import useInsumos from "hooks/useInsumos";
+import useCompras from "hooks/useCompras";
 
 const tableIcons = {
   Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
 };
-export default function ModalCompra() {
+export default function ModalCompra({
+  openModalCompra,
+  handleOpenModalCompra,
+  getCompras,
+}) {
   const quantity = useRef();
+  const precio = useRef();
+  const nota = useRef();
   const showNotification = useCustomSnackbar();
-  const { openModalVenta, handleOpenModalVenta } = useOrdersContext();
   //const showNotification = useCustomSnackbar();
   const [isLoading, setIsLoading] = useState(false);
-  const [niame, setNiame] = useState({});
-  const [niames, setNiames] = useState([]);
+  const [insumo, setInsum] = useState({});
+  const [insumos, setInsumo] = useState([]);
   const [total, setTotal] = useState(0);
-  const { getNiames } = useNiames();
+  const { getInsumos } = useInsumos();
+  const { crearCompra } = useCompras();
 
-  useEffect(async () => {
-    setNiames(await getNiames());
+  useEffect(() => {
+    getInsumos().then((resposne) => {
+      setInsumo(resposne);
+    });
   }, []);
 
   const columns = [
@@ -46,47 +54,68 @@ export default function ModalCompra() {
   const [data, setData] = useState([]);
 
   const addRow = () => {
-    if (!niame) {
-      console.log("ntra aquie asd", niame);
+    if (!insumo.nombre) {
       showNotification("Todos los campos son obligatorios", "warning");
     } else {
       setData([
         ...data,
         {
-          niameId: niame.id_niame,
-          nombre: niame.nombre,
-          precio: niame.precio,
+          insumoId: insumo.id,
+          nombre: insumo.nombre,
+          precio: precio.current.value,
           cantidad: quantity.current.value,
-          total: Number(quantity.current.value) * Number(niame.precio),
+          total: Number(quantity.current.value) * Number(precio.current.value),
         },
       ]);
-      setTotal(total + Number(quantity.current.value) * Number(niame.precio));
-      setNiame({});
+      setTotal(
+        total + Number(quantity.current.value) * Number(precio.current.value)
+      );
+      setInsum({});
       quantity.current.value = "";
-      console.log("data index", data);
+      precio.current.value = "";
     }
+  };
+
+  const finalizar = () => {
+    setIsLoading(true);
+    crearCompra({
+      nota: nota.current.value,
+      total: total,
+      compraDetalles: data,
+    })
+      .then(() => {
+        showNotification("Compra registrada correctamente", "success");
+        setIsLoading(false);
+        setData([]);
+        nota.current.value = "";
+        setTotal(0);
+        getCompras();
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
     <ModalContainer
-      open={openModalVenta}
-      onClose={() => handleOpenModalVenta(false)}
+      open={openModalCompra}
+      onClose={() => handleOpenModalCompra(false)}
       title="Crear venta"
       maxWidth="lg"
     >
       <Grid container justify="center" spacing={2} style={{ margin: "10px 0" }}>
         <Grid item md={2} lg={2} xs={12}>
           <Autocomplete
-            value={niame}
+            value={insumo}
             fullWidth
             getOptionLabel={(option) => option.nombre}
-            onChange={(event, newNiame) => {
-              if (newNiame) {
-                setNiame(newNiame);
+            onChange={(event, newInsumo) => {
+              if (newInsumo) {
+                setInsum(newInsumo);
               }
             }}
-            id="niame"
-            options={niames}
+            id="insumo"
+            options={insumos}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -98,9 +127,12 @@ export default function ModalCompra() {
           />
         </Grid>
         <Grid item md={2} lg={2} xs={12}>
+          <TextField label="Cantidad" inputRef={quantity} type="number" />
+        </Grid>
+        <Grid item md={2} lg={2} xs={12}>
           <TextField
-            label="Cantidad"
-            inputRef={quantity}
+            label="Precio"
+            inputRef={precio}
             type="number"
             onKeyPress={(e) => {
               if (e.key === "Enter") {
@@ -124,7 +156,7 @@ export default function ModalCompra() {
             size="large"
             variant="contained"
             color="primary"
-            onClick={addRow}
+            onClick={finalizar}
           >
             Finalizar
           </Button>
@@ -172,7 +204,12 @@ export default function ModalCompra() {
 
               <Grid item just md={3}>
                 <Grid container justify="flex-end">
-                  <Typography variant="h6">TOTAL: ${total}</Typography>
+                  <TextField
+                    label="TOTAL:$"
+                    autoFocus
+                    value={total}
+                    onChange={(e) => setTotal(Number(e.target.value))}
+                  />
                 </Grid>
               </Grid>
             </Grid>
@@ -180,7 +217,7 @@ export default function ModalCompra() {
         }}
       />
       <br />
-      <TextField fullWidth label="Nota:" variant="outlined" />
+      <TextField fullWidth label="Nota:" inputRef={nota} variant="outlined" />
     </ModalContainer>
   );
 }

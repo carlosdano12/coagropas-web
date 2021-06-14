@@ -94,7 +94,7 @@ export default function AsociadoForm({
                 fullWidth
                 label="Apellido"
                 inputRef={apellido}
-                autoComplete="precio"
+                autoComplete="apellido"
                 disabled={isLoading}
                 InputLabelProps={{ shrink: true }}
               />

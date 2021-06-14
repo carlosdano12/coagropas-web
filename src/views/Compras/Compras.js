@@ -1,48 +1,24 @@
-import React, { useState } from "react";
-import useCompras from "../../hooks/useOrders";
+import React, { useEffect, useState } from "react";
+import useCompras from "../../hooks/useCompras";
 import { Button, Grid, CircularProgress, Typography } from "@material-ui/core";
 import MuiTable from "../../components/moleculas/MuiTable";
-import CreateShippingModal from "../../components/organisms/CreateShippingModal";
 import ModalCompra from "./Compra";
-import { useOrdersContext } from "contextApi/OrdersContext";
+import ModalCompraDetalle from "components/organisms/ModalCompra";
 
 export default function Compras() {
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({ limit: 10, page: 1 });
   const [totalCompras, setTotalCompras] = useState(0);
-  const [compras, setCompras] = useState([
-    {
-      asociadoIdAsociado: "90bc58f2-c9d9-405a-8df8-a53a30e33e6a",
-      estado: true,
-      fechaVenta: "2021-05-01",
-      id: "23b659ea-b8c3-41ec-b383-fdea141720e0",
-      nota: "Compras detal",
-      total: 352000,
-    },
-    {
-      asociadoIdAsociado: "90bc58f2-c9d9-405a-8df8-a53a30e33e6a",
-      estado: true,
-      fechaVenta: "2021-05-02",
-      id: "23b659ea-b8c3-41ec-b383-fdea141720e0",
-      nota: "Sin novedades",
-      total: 150000,
-    },
-    {
-      asociadoIdAsociado: "90bc58f2-c9d9-405a-8df8-a53a30e33e6a",
-      estado: true,
-      fechaVenta: "2021-05-03",
-      id: "23b659ea-b8c3-41ec-b383-fdea141720e0",
-      nota: "",
-      total: 20000,
-    },
-  ]);
+  const [compra, setCompra] = useState({});
+  const [openModal, setOpenModal] = useState(false);
+  const [openModalCompra, setOpenModalCompra] = useState(true);
+  const [compras, setCompras] = useState([]);
   const { getCompras } = useCompras();
-  const { setVenta, handleOpenModalCompra } = useOrdersContext();
 
   const createShipping = (position) => {
     setIsLoading(true);
-
-    setVenta(compras[position]);
+    setOpenModal(true);
+    setCompra(compras[position]);
     setIsLoading(false);
   };
 
@@ -64,13 +40,9 @@ export default function Compras() {
       });
   };
 
-  // useEffect(() => {
-  //   let m = false;
-  //   if (!m) handleGetOrders();
-  //   return () => {
-  //     m = true;
-  //   };
-  // }, [pagination]);
+  useEffect(() => {
+    handleGetOrders();
+  }, []);
 
   const options = {
     print: false,
@@ -119,8 +91,8 @@ export default function Compras() {
     },
     // 3 date_created -> Fecha del pedido
     {
-      name: "fechaVenta",
-      label: "Fecha de la venta",
+      name: "fechaCompra",
+      label: "Fecha de la compra",
     },
     {
       name: "nota",
@@ -129,6 +101,11 @@ export default function Compras() {
     {
       name: "total",
       label: "Total",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => (
+          <div style={{ fontSize: 15 }}>${value}</div>
+        ),
+      },
     },
     {
       name: "action",
@@ -163,7 +140,7 @@ export default function Compras() {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => handleOpenModalCompra(true)}
+            onClick={() => setOpenModalCompra(true)}
           >
             Registar compra
           </Button>
@@ -178,8 +155,16 @@ export default function Compras() {
           />
         </Grid>
       </Grid>
-      <CreateShippingModal getOrders={handleGetOrders} />
-      <ModalCompra />
+      <ModalCompraDetalle
+        compra={compra}
+        openModal={openModal}
+        handleOpenModal={setOpenModal}
+      />
+      <ModalCompra
+        openModalCompra={openModalCompra}
+        handleOpenModalCompra={setOpenModalCompra}
+        getCompras={handleGetOrders}
+      />
     </>
   );
 }

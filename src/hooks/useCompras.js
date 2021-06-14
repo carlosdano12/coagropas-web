@@ -2,7 +2,7 @@ import { getAllVentas } from "../services/ordersService";
 import useLogin from "hooks/useLogin";
 import axios from "axios";
 
-import { URL_VENTAS } from "../constants/urls";
+import { URL_COMPRAS } from "../constants/urls";
 
 export default function useCompras() {
   const { jwt } = useLogin();
@@ -12,18 +12,20 @@ export default function useCompras() {
   };
 
   const getCompras = async () => {
-    return await getAllVentas({ jwt });
+    return (await axios.get(`${URL_COMPRAS}/hechas`, { headers })).data;
   };
-  const getOrdersByOrderNumber = async (orderNumber) => {
-    return axios
-      .get(`${URL_VENTAS}/packages/${orderNumber}`, { headers })
-      .then((response) => {
-        return response.data;
-      });
+
+  const crearCompra = async (data) => {
+    const response = await axios.post(`${URL_COMPRAS}/hechas`, data, {
+      headers,
+    });
+    if (response) {
+      return response.data;
+    }
   };
 
   return {
     getCompras,
-    getOrdersByOrderNumber,
+    crearCompra,
   };
 }
