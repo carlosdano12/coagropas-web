@@ -3,10 +3,10 @@ import { Grid, Typography } from "@material-ui/core";
 import ModalContainer from "components/moleculas/ModalContainer";
 import useNiames from "hooks/useNiames";
 import AsociadoForm from "components/organisms/AsociadoForm/AsociadoForm";
-import AsociadoList from "components/organisms/AsociadoList/AsociadoList";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { TextField } from "@material-ui/core";
 import useRole from "hooks/useRole";
+import RolesList from "components/organisms/RolesList/RolesList";
 
 export default function Role() {
   const [isLoading, setIsLoading] = useState(false);
@@ -99,10 +99,10 @@ export default function Role() {
           </Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={8}>
-          <AsociadoList
+          <RolesList
             handleOnClickEditProvider={handleOnClickEditProvider}
             addProviderButton={addProviderButton}
-            providers={providers}
+            asociados={providers}
             isLoading={isLoading}
             titleBtn="Roles"
           />
