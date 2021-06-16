@@ -1,16 +1,10 @@
 import React from "react";
 import MuiTable from "components/moleculas/MuiTable";
-import { Button, Grid } from "@material-ui/core";
+import { Button, Chip, Grid } from "@material-ui/core";
 import CustomToolbar from "components/moleculas/CustomToolBar/CustomToolBar";
 
 export default function RolesList(props) {
-  const {
-    asociados,
-    isLoading,
-    handleOnClickEditProvider,
-    addProviderButton,
-    titleBtn,
-  } = props;
+  const { asociados, isLoading, handleOnClickEditProvider, titleBtn } = props;
 
   const columns = [
     {
@@ -37,6 +31,36 @@ export default function RolesList(props) {
       label: "Telefono",
     },
     {
+      name: "roles",
+      label: "Roles",
+      options: {
+        customBodyRender: (value) => (
+          <Grid container justify="flex-start" alignItems="center">
+            {value &&
+              value.map((rol) => {
+                return (
+                  <Grid
+                    container
+                    justify="flex-start"
+                    alignItems="center"
+                    key={rol.id_rol}
+                  >
+                    <Chip
+                      variant="outlined"
+                      size="small"
+                      color="primary"
+                      label={`${rol.nombre}`}
+                      clickable
+                      style={{ marginBottom: 10 }}
+                    />
+                  </Grid>
+                );
+              })}
+          </Grid>
+        ),
+      },
+    },
+    {
       name: "",
       label: "Acciones",
       options: {
@@ -54,7 +78,10 @@ export default function RolesList(props) {
                 color="primary"
                 style={{ marginRight: 5 }}
                 onClick={() => {
-                  handleOnClickEditProvider(tableMeta.rowData[0]);
+                  handleOnClickEditProvider({
+                    id: tableMeta.rowData[0],
+                    roles: tableMeta.rowData[5],
+                  });
                 }}
               >
                 {titleBtn}
@@ -73,11 +100,6 @@ export default function RolesList(props) {
     selectableRowsHeader: false,
     selectableRows: "none",
     viewColumns: false,
-    customToolbar: () => {
-      return (
-        <CustomToolbar tooltip="Agregar asociado" onClick={addProviderButton} />
-      );
-    },
   };
 
   return (

@@ -52,6 +52,18 @@ export default function useAsociados() {
     ).data;
   };
 
+  const updateRoles = async (data) => {
+    return (
+      await axios.put(
+        `${URL_ASOCIADOS}/roles/${data.id}`,
+        { roles: data.roles },
+        {
+          headers,
+        }
+      )
+    ).data;
+  };
+
   return {
     getAsociados,
     getAsociadosRequest,
@@ -61,5 +73,6 @@ export default function useAsociados() {
     addAsociadoRequest,
     updateAsociado,
     updateAsociadoRequest,
+    updateRoles,
   };
 }

@@ -138,30 +138,6 @@ export default function FixedPlugin(props) {
             </a>
           </li>
 
-          <li className="button-container">
-            <div className="button-container">
-              <Button
-                color="success"
-                href="https://www.creative-tim.com/product/material-dashboard-react?ref=mdr-fixed-plugin"
-                target="_blank"
-                fullWidth
-              >
-                Download free!
-              </Button>
-            </div>
-          </li>
-          <li className="button-container">
-            <div className="button-container">
-              <Button
-                color="warning"
-                href="https://www.creative-tim.com/product/material-dashboard-pro-react?ref=mdr-fixed-plugin"
-                target="_blank"
-                fullWidth
-              >
-                Get PRO version
-              </Button>
-            </div>
-          </li>
           <li className="adjustments-line" />
         </ul>
       </div>

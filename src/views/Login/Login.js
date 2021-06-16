@@ -14,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import useLogin from "hooks/useLogin";
 import { useHistory } from "react-router-dom";
+import logo from "assets/img/logo2.png";
 
 function Copyright() {
   return (
@@ -37,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  notchedOutline: {
+    borderColor: "green !important",
   },
 }));
 
@@ -66,12 +69,17 @@ export default function Login() {
   const classes = useStyles();
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container
+      component="main"
+      maxWidth="xs"
+      style={{
+        boxShadow: "1px 1px 2px 2px rgba(0, 0, 0, 0.5)",
+        borderRadius: 10,
+      }}
+    >
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+        <Avatar variant="square" className={classes.avatar} src={logo} />
         <Typography component="h1" variant="h5">
           Login
         </Typography>
@@ -86,6 +94,11 @@ export default function Login() {
             name="email"
             autoComplete="email"
             autoFocus
+            InputProps={{
+              classes: {
+                notchedOutline: classes.notchedOutline,
+              },
+            }}
             inputRef={document}
           />
           <TextField
@@ -93,6 +106,11 @@ export default function Login() {
             margin="normal"
             required
             fullWidth
+            InputProps={{
+              classes: {
+                notchedOutline: classes.notchedOutline,
+              },
+            }}
             name="password"
             label="Contraseña"
             type="password"
@@ -108,6 +126,7 @@ export default function Login() {
             fullWidth
             variant="contained"
             color="primary"
+            style={{ backgroundColor: "green" }}
             className={classes.submit}
             onClick={() => {
               login({
