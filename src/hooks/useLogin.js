@@ -41,7 +41,7 @@ export default function useLogin() {
             window.localStorage.setItem("shopName", response.data.shopName);
             context.setShopName(response.data.shopName);
 
-            history.push("/admin/dashboard");
+            history.push("/admin/user");
             console.log("response:", response);
           } else {
             err = true;

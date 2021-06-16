@@ -100,7 +100,7 @@ export default function ModalCompra({
     <ModalContainer
       open={openModalCompra}
       onClose={() => handleOpenModalCompra(false)}
-      title="Crear venta"
+      title="Crear compra"
       maxWidth="lg"
     >
       <Grid container justify="center" spacing={2} style={{ margin: "10px 0" }}>

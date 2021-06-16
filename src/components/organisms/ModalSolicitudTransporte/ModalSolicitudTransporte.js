@@ -89,7 +89,7 @@ export default function ModalSolicitudTransporte({
     <ModalContainer
       open={openModal}
       onClose={() => handleOpenModal(false)}
-      title="Detalles de la solicitud de compra"
+      title="Detalles del transporte"
       maxWidth="lg"
     >
       <Grid container justify="center" spacing={2}>
